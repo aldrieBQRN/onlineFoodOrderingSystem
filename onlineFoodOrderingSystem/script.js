@@ -14,8 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Checkout modal elements
     const checkoutSummary = document.getElementById('checkoutSummary');
     const checkoutTotal = document.getElementById('checkoutTotal');
+    
+    // UPDATED Checkout Modal elements
     const finalOrderType = document.getElementById('finalOrderType');
     const addressField = document.getElementById('addressField');
+    const contactDetails = document.getElementById('contactDetails');
+    const createOrderBtn = document.getElementById('createOrderBtn');
 
     // Function to bind cart events
     function bindCartEvents() {
@@ -54,10 +58,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Toggle delivery address field based on order type
-    if (finalOrderType && addressField) {
-        finalOrderType.addEventListener('change', (e) => {
-            addressField.style.display = e.target.value === 'Pickup' ? 'none' : 'block';
-        });
+    function toggleAddressField() {
+        if (finalOrderType && addressField) {
+            addressField.style.display = finalOrderType.value === 'Pickup' ? 'none' : 'block';
+            
+            // Set required attribute on address fields based on selection
+            const addressFields = addressField.querySelectorAll('input[name], textarea[name]');
+            addressFields.forEach(field => {
+                field.required = finalOrderType.value === 'Delivery';
+            });
+        }
+    }
+
+    if (finalOrderType) {
+        finalOrderType.addEventListener('change', toggleAddressField);
+        // Initial call to set correct display on load
+        toggleAddressField();
+    }
+
+    // Setup checkout form submission
+    function setupCheckoutForm() {
+        const checkoutForm = document.getElementById('checkoutForm');
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (cart.length === 0) {
+                    alert('Your cart is empty. Please add items before checking out.');
+                    return;
+                }
+                
+                const formData = new FormData(checkoutForm);
+                const orderData = {
+                    contact: {
+                        firstName: formData.get('first_name'),
+                        lastName: formData.get('last_name'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone_number')
+                    },
+                    delivery: {
+                        street: formData.get('street_address'),
+                        barangay: formData.get('barangay'),
+                        city: formData.get('city'),
+                        province: formData.get('province'),
+                        zipCode: formData.get('zip_code'),
+                        landmarks: formData.get('landmarks'),
+                        instructions: formData.get('delivery_instructions')
+                    },
+                    orderType: formData.get('order_type'),
+                    paymentMethod: formData.get('payment_method'),
+                    orderTime: formData.get('order_time'),
+                    items: cart,
+                    total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                };
+                
+                // Here you would typically send this data to your server
+                console.log('Order Data:', orderData);
+                
+                // For now, just show a success message
+                alert('Order submitted successfully! We will contact you shortly to confirm your order.');
+                
+                // Reset cart and close modal
+                cart = [];
+                updateCartDisplay();
+                const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                if (checkoutModal) checkoutModal.hide();
+            });
+        }
     }
 
     function updateCartDisplay() {
@@ -96,8 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
             if (checkoutSummary) {
-                checkoutSummary.innerHTML = '<li class="list-group-item">Your cart is empty.</li>';
+                checkoutSummary.innerHTML = '<li class="list-group-item text-center text-muted">Your cart is empty.</li>';
             }
+            // Disable checkout button if cart is empty
+            if (createOrderBtn) {
+                 createOrderBtn.disabled = true;
+                 createOrderBtn.textContent = 'Cart is Empty';
+            }
+
         } else {
             if (emptyCart) emptyCart.style.display = 'none';
             
@@ -134,6 +207,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }
             });
+            
+            // Re-enable checkout button if cart has items
+            if (createOrderBtn) {
+                 createOrderBtn.disabled = false;
+                 createOrderBtn.innerHTML = '<i class="bi bi-bag-check"></i> Create Order';
+            }
         }
     }
 
@@ -150,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Authentication Logic
+    // Authentication Logic (unchanged from original)
     function handleAuthResponse(data, messageDiv, form, successCallback) {
         messageDiv.classList.remove('d-none', 'alert-success', 'alert-danger');
         if (data.success) {
@@ -210,9 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    
-        
-
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
         signupForm.addEventListener('submit', function(e) {
@@ -254,6 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial bind of cart events
     bindCartEvents();
+    // Initial update of cart display
+    updateCartDisplay();
+    // Setup checkout form
+    setupCheckoutForm();
 
     // Fetch menu and rebind events
     fetch('fetch_menu.php')
@@ -267,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const menuSection = document.querySelector('#menu .col-lg-8');
             if (!menuSection) return;
 
+            // Clear PHP-rendered content
             menuSection.innerHTML = "";
 
             for (const category in data) {
