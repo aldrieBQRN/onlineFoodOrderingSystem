@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 const formData = new FormData(checkoutForm);
+                // In the setupCheckoutForm function, find this section and replace it:
                 const orderData = {
                     contact: {
                         firstName: formData.get('first_name'),
@@ -105,24 +106,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         landmarks: formData.get('landmarks'),
                         instructions: formData.get('delivery_instructions')
                     },
-                    orderType: formData.get('order_type'),
-                    paymentMethod: formData.get('payment_method'),
-                    orderTime: formData.get('order_time'),
+                    // FIXED: Changed to snake_case to match PHP expectations
+                    order_type: formData.get('order_type'),
+                    payment_method: formData.get('payment_method'),
+                    order_time: formData.get('order_time'),
                     items: cart,
                     total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
                 };
-                
-                // Here you would typically send this data to your server
-                console.log('Order Data:', orderData);
-                
-                // For now, just show a success message
-                alert('Order submitted successfully! We will contact you shortly to confirm your order.');
-                
-                // Reset cart and close modal
-                cart = [];
-                updateCartDisplay();
-                const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
-                if (checkoutModal) checkoutModal.hide();
+                                
+                // Send order data to server
+                fetch('create_order.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Order placed successfully! Your order number is: ${data.order_number}`);
+                        
+                        // Reset cart and close modal
+                        cart = [];
+                        updateCartDisplay();
+                        const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                        if (checkoutModal) checkoutModal.hide();
+                    } else {
+                        alert('Failed to place order: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while placing your order. Please try again.');
+                });
             });
         }
     }

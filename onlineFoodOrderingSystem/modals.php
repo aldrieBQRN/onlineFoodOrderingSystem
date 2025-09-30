@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="modal-body bg-body-tertiary">
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-7 border-end pe-lg-4">
                         <form id="checkoutForm">
@@ -40,6 +40,7 @@
                                         <select class="form-select" name="payment_method" required>
                                             <option value="COD">Cash on Delivery / Pickup</option>
                                             <option value="Gcash">GCash</option>
+                                            <option value="Card">Credit/Debit Card</option>
                                         </select>
                                     </div>
 

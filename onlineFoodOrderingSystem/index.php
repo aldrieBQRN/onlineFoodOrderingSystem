@@ -72,8 +72,10 @@ $is_home = true; // Flag to indicate this is the home/menu page
                                 <i class="bi bi-person-circle me-1"></i>
                                 <?php echo htmlspecialchars($_SESSION['full_name']); ?>
                             </a>
+                            <!-- In both desktop and mobile dropdown menus, update the dropdown items: -->
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                                <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li> <!-- ADD THIS LINE -->
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                             </ul>
