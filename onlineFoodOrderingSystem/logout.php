@@ -5,10 +5,10 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Check if it's an AJAX request
-$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+$isAjax = ! empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 
 // Unset all session variables
-$_SESSION = array();
+$_SESSION = [];
 
 // Destroy the session
 session_destroy();
@@ -23,4 +23,3 @@ if ($isAjax) {
     header("Location: index.php");
     exit;
 }
-?>

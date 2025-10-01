@@ -6,7 +6,7 @@
                     <h5 class="modal-title" id="checkoutModalLabel">Place Your Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                
+
                 <div class="d-flex justify-content-between align-items-center text-center">
                     <div class="flex-fill">
                         <i class="bi bi-circle-fill text-success fs-4 d-block" id="stepOrderIcon"></i>
@@ -71,22 +71,26 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-semibold">First Name</label>
-                                            <input type="text" class="form-control" name="first_name" placeholder="Enter first name" required>
+                                            <input type="text" class="form-control" name="first_name"
+                                                placeholder="Enter first name" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-semibold">Last Name</label>
-                                            <input type="text" class="form-control" name="last_name" placeholder="Enter last name" required>
+                                            <input type="text" class="form-control" name="last_name"
+                                                placeholder="Enter last name" required>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Email Address</label>
-                                        <input type="email" class="form-control" name="email" placeholder="your.email@example.com" required>
+                                        <input type="email" class="form-control" name="email"
+                                            placeholder="your.email@example.com" required>
                                     </div>
-                                    
+
                                     <div class="mb-0">
                                         <label class="form-label fw-semibold">Contact Number</label>
-                                        <input type="text" class="form-control" name="phone_number" placeholder="09XXXXXXXXX" required>
+                                        <input type="text" class="form-control" name="phone_number"
+                                            placeholder="09XXXXXXXXX" required>
                                     </div>
                                 </div>
                             </div>
@@ -100,40 +104,47 @@
                                     <div class="row">
                                         <div class="col-12 mb-3">
                                             <label class="form-label fw-semibold">Street Address</label>
-                                            <input type="text" class="form-control" name="street_address" placeholder="House/Building No., Street Name">
+                                            <input type="text" class="form-control" name="street_address"
+                                                placeholder="House/Building No., Street Name">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-semibold">Barangay</label>
-                                            <input type="text" class="form-control" name="barangay" placeholder="Barangay">
+                                            <input type="text" class="form-control" name="barangay"
+                                                placeholder="Barangay">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-semibold">City/Municipality</label>
-                                            <input type="text" class="form-control" name="city" placeholder="City/Municipality">
+                                            <input type="text" class="form-control" name="city"
+                                                placeholder="City/Municipality">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-semibold">Province</label>
-                                            <input type="text" class="form-control" name="province" placeholder="Province">
+                                            <input type="text" class="form-control" name="province"
+                                                placeholder="Province">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-semibold">ZIP Code</label>
-                                            <input type="text" class="form-control" name="zip_code" placeholder="ZIP Code">
+                                            <input type="text" class="form-control" name="zip_code"
+                                                placeholder="ZIP Code">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Landmarks (Optional)</label>
-                                        <textarea class="form-control" name="landmarks" rows="2" placeholder="Nearby landmarks, building names, etc."></textarea>
+                                        <textarea class="form-control" name="landmarks" rows="2"
+                                            placeholder="Nearby landmarks, building names, etc."></textarea>
                                     </div>
-                                    
+
                                     <div class="mb-0">
                                         <label class="form-label fw-semibold">Delivery Instructions (Optional)</label>
-                                        <textarea class="form-control" name="delivery_instructions" rows="2" placeholder="Special instructions for delivery"></textarea>
+                                        <textarea class="form-control" name="delivery_instructions" rows="2"
+                                            placeholder="Special instructions for delivery"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -159,10 +170,12 @@
                                 </div>
                             </div>
                             <div class="card-footer bg-transparent border-0">
-                                <button class="btn btn-theme w-100 py-2 rounded-pill" form="checkoutForm" type="submit" id="createOrderBtn">
+                                <button class="btn btn-theme w-100 py-2 rounded-pill" form="checkoutForm" type="submit"
+                                    id="createOrderBtn">
                                     <i class="bi bi-bag-check"></i> Create Order
                                 </button>
-                                <button class="btn btn-link w-100 mt-2 text-decoration-none" data-bs-toggle="modal" data-bs-target="#cartModal" data-bs-dismiss="modal">
+                                <button class="btn btn-link w-100 mt-2 text-decoration-none" data-bs-toggle="modal"
+                                    data-bs-target="#cartModal" data-bs-dismiss="modal">
                                     <i class="bi bi-arrow-left"></i> Back to Cart
                                 </button>
                             </div>
@@ -189,7 +202,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal" data-bs-target="#checkoutModal" data-bs-dismiss="modal">
+                <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal"
+                    data-bs-target="#checkoutModal" data-bs-dismiss="modal">
                     <i class="bi bi-credit-card"></i> Proceed to Checkout
                 </button>
             </div>
@@ -218,7 +232,8 @@
                     <button type="submit" class="btn btn-theme w-100 py-2 rounded-pill">Login</button>
                 </form>
                 <p class="text-center mt-3">
-                    Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Sign up here</a>
+                    Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal"
+                        data-bs-dismiss="modal">Sign up here</a>
                 </p>
             </div>
         </div>
@@ -254,9 +269,23 @@
                     <button type="submit" class="btn btn-theme w-100 py-2 rounded-pill">Sign Up</button>
                 </form>
                 <p class="text-center mt-3">
-                    Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Login here</a>
+                    Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                        data-bs-dismiss="modal">Login here</a>
                 </p>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div id="orderSuccessToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong class="me-auto">Order Placed!</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessageBody">
+            Your order has been placed successfully.
         </div>
     </div>
 </div>
