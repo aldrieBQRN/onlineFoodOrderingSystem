@@ -352,62 +352,62 @@
                                 $contact = $contact_stmt->get_result()->fetch_assoc();
                             ?>
 
-	                        <div class="order-card">
-	                            <div class="order-header">
-	                                <div class="d-flex justify-content-between align-items-start">
-	                                    <div>
-	                                        <h5 class="fw-bold mb-1">Order #<?php echo $order['order_number']; ?></h5>
-	                                        <p class="text-muted mb-0">
-	                                            <i class="bi bi-calendar me-1"></i>
-	                                            <?php echo date('F j, Y g:i A', strtotime($order['created_at'])); ?>
-	                                        </p>
-	                                    </div>
-	                                    <span class="status-badge status-<?php echo $order['order_status']; ?>">
-	                                        <?php echo ucfirst($order['order_status']); ?>
-	                                    </span>
-	                                </div>
-	                            </div>
+			                        <div class="order-card">
+			                            <div class="order-header">
+			                                <div class="d-flex justify-content-between align-items-start">
+			                                    <div>
+			                                        <h5 class="fw-bold mb-1">Order #<?php echo $order['order_number']; ?></h5>
+			                                        <p class="text-muted mb-0">
+			                                            <i class="bi bi-calendar me-1"></i>
+			                                            <?php echo date('F j, Y g:i A', strtotime($order['created_at'])); ?>
+			                                        </p>
+			                                    </div>
+			                                    <span class="status-badge status-<?php echo $order['order_status']; ?>">
+			                                        <?php echo ucfirst($order['order_status']); ?>
+			                                    </span>
+			                                </div>
+			                            </div>
 
-	                            <div class="order-body">
-	                                <div class="order-meta">
-	                                    <div class="meta-item">
-	                                        <span class="meta-label">Order Type</span>
-	                                        <span class="meta-value"><?php echo $order['order_type']; ?></span>
-	                                    </div>
-	                                    <div class="meta-item">
-	                                        <span class="meta-label">Payment Method</span>
-	                                        <span class="meta-value"><?php echo $order['payment_method']; ?></span>
-	                                    </div>
-	                                    <div class="meta-item">
-	                                        <span class="meta-label">Total Amount</span>
-	                                        <span
-	                                            class="meta-value fw-bold text-success">₱<?php echo number_format($order['total_amount'], 2); ?></span>
-	                                    </div>
-	                                    <div class="meta-item">
-	                                        <span class="meta-label">Contact</span>
-	                                        <span
-	                                            class="meta-value"><?php echo htmlspecialchars($contact['first_name'] . ' ' . $contact['last_name']); ?></span>
-	                                    </div>
-	                                </div>
+			                            <div class="order-body">
+			                                <div class="order-meta">
+			                                    <div class="meta-item">
+			                                        <span class="meta-label">Order Type</span>
+			                                        <span class="meta-value"><?php echo $order['order_type']; ?></span>
+			                                    </div>
+			                                    <div class="meta-item">
+			                                        <span class="meta-label">Payment Method</span>
+			                                        <span class="meta-value"><?php echo $order['payment_method']; ?></span>
+			                                    </div>
+			                                    <div class="meta-item">
+			                                        <span class="meta-label">Total Amount</span>
+			                                        <span
+			                                            class="meta-value fw-bold text-success">₱<?php echo number_format($order['total_amount'], 2); ?></span>
+			                                    </div>
+			                                    <div class="meta-item">
+			                                        <span class="meta-label">Contact</span>
+			                                        <span
+			                                            class="meta-value"><?php echo htmlspecialchars($contact['first_name'] . ' ' . $contact['last_name']); ?></span>
+			                                    </div>
+			                                </div>
 
-	                                <h6 class="fw-semibold mb-3">Order Items (<?php echo $order['total_quantity']; ?> items)
-	                                </h6>
-	                                <div class="order-items">
-	                                    <?php while ($item = $items_result->fetch_assoc()): ?>
-	                                    <div class="order-item">
-	                                        <div class="flex-grow-1">
-	                                            <div class="fw-semibold"><?php echo htmlspecialchars($item['item_name']); ?>
-	                                            </div>
-	                                            <div class="text-muted small">
-	                                                ₱<?php echo number_format($item['unit_price'], 2); ?> ×
-	                                                <?php echo $item['quantity']; ?>
-	                                            </div>
-	                                        </div>
-	                                        <div class="fw-bold">
-	                                            ₱<?php echo number_format($item['total_price'], 2); ?>
-	                                        </div>
-	                                    </div>
-	                                    <?php endwhile; ?>
+			                                <h6 class="fw-semibold mb-3">Order Items (<?php echo $order['total_quantity']; ?> items)
+			                                </h6>
+			                                <div class="order-items">
+			                                    <?php while ($item = $items_result->fetch_assoc()): ?>
+			                                    <div class="order-item">
+			                                        <div class="flex-grow-1">
+			                                            <div class="fw-semibold"><?php echo htmlspecialchars($item['item_name']); ?>
+			                                            </div>
+			                                            <div class="text-muted small">
+			                                                ₱<?php echo number_format($item['unit_price'], 2); ?> ×
+			                                                <?php echo $item['quantity']; ?>
+			                                            </div>
+			                                        </div>
+			                                        <div class="fw-bold">
+			                                            ₱<?php echo number_format($item['total_price'], 2); ?>
+			                                        </div>
+			                                    </div>
+			                                    <?php endwhile; ?>
                                 </div>
 
                                 <!-- Order Progress Timeline -->
@@ -431,21 +431,21 @@
                                                 $is_current   = $status === $current_status;
                                                 $class        = $is_completed ? 'completed' : ($is_current ? 'current' : 'pending');
                                             ?>
-	                                        <div class="timeline-item<?php echo $class; ?>">
-	                                            <div class="d-flex justify-content-between align-items-center">
-	                                                <div>
-	                                                    <div class="fw-semibold"><?php echo $label; ?></div>
-	                                                    <?php if ($is_completed || $is_current): ?>
-	                                                    <small class="text-muted">
-	                                                        <?php
-                                                                    if ($is_current && $status === 'pending') {
-                                                                        echo 'Just now';
-                                                                    } elseif ($is_completed) {
-                                                                    echo 'Completed';
-                                                                } else {
-                                                                    echo 'In progress';
-                                                                }
-                                                            ?>
+			                                        <div class="timeline-item<?php echo $class; ?>">
+			                                            <div class="d-flex justify-content-between align-items-center">
+			                                                <div>
+			                                                    <div class="fw-semibold"><?php echo $label; ?></div>
+			                                                    <?php if ($is_completed || $is_current): ?>
+			                                                    <small class="text-muted">
+			                                                        <?php
+                                                                            if ($is_current && $status === 'pending') {
+                                                                                echo 'Just now';
+                                                                            } elseif ($is_completed) {
+                                                                            echo 'Completed';
+                                                                        } else {
+                                                                            echo 'In progress';
+                                                                        }
+                                                                    ?>
                                                     </small>
                                                     <?php endif; ?>
                                                 </div>
@@ -462,7 +462,7 @@
                             <div class="order-footer">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">
-                                        Order ID:                                                  <?php echo $order['order_id']; ?>
+                                        Order ID:                                                                                                                                                    <?php echo $order['order_id']; ?>
                                     </small>
                                     <div class="order-actions">
                                         <button class="btn btn-outline-primary btn-sm"

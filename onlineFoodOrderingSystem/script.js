@@ -85,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderSuccessToastEl = document.getElementById("orderSuccessToast");
     const toastMessageBody = document.getElementById("toastMessageBody");
 
-    // Attempt to initialize the Toast object once
     let orderSuccessToast;
     if (
       orderSuccessToastEl &&
@@ -94,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       orderSuccessToast = new bootstrap.Toast(orderSuccessToastEl);
     }
-    // --- END MODIFIED BLOCK ---
 
     if (checkoutForm) {
       checkoutForm.addEventListener("submit", function (e) {
@@ -143,12 +141,10 @@ document.addEventListener("DOMContentLoaded", () => {
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              // NEW: Ensure toast elements exist before attempting to show
               if (orderSuccessToast && toastMessageBody) {
                 toastMessageBody.textContent = `Order placed successfully! Your order number is: ${data.order_number}`;
                 orderSuccessToast.show();
               } else {
-                // Fallback alert if toast is not available (this is what you were seeing)
                 alert(
                   `Order placed successfully! Your order number is: ${data.order_number}`
                 );
@@ -334,7 +330,13 @@ document.addEventListener("DOMContentLoaded", () => {
               document.getElementById("loginModal")
             );
             if (loginModal) loginModal.hide();
-            updateNavbar(true, data.full_name);
+
+            // REDIRECT ADMIN TO DASHBOARD
+            if (data.role === "admin") {
+              window.location.href = "admin_dashboard.php";
+            } else {
+              updateNavbar(true, data.full_name);
+            }
           });
         })
         .catch((error) => {

@@ -65,6 +65,7 @@ try {
                     'full_name' => $user['full_name'],
                     'email'     => $email,
                     'user_id'   => $user['user_id'],
+                    'role'      => $user['role'], // Add role to response
                 ]);
             }
         } else {
