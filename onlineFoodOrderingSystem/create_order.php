@@ -38,7 +38,7 @@ try {
     $conn->begin_transaction();
 
     // Generate unique order number
-    $order_number = 'BSL' . date('Ymd') . strtoupper(uniqid());
+    $order_number = 'ORD' . date('ymd') . rand(1000, 9999);
 
     // Insert order
     $order_sql = "INSERT INTO orders (user_id, order_number, order_type, order_time, payment_method, total_amount)

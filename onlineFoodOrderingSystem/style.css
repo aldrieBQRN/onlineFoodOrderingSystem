@@ -89,13 +89,14 @@ footer a:hover {
 /* Cart Sidebar Styles */
 .cart-sidebar {
   position: sticky;
-  top: 10px;
-  height: calc(100vh - 120px);
+  top: 120px; /* sticks right below the navbar */
+  height: calc(100vh - 140px); /* adjusted to avoid overflow */
   overflow-y: auto;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 0;
+  z-index: 999; /* ensure it stays above content */
 }
 
 .cart-header {

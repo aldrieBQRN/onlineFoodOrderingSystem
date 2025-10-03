@@ -20,9 +20,9 @@
         $stmt->bind_param("si", $new_status, $order_id);
 
         if ($stmt->execute()) {
-            $message = "✅ Order status updated successfully!";
+            $message = "Order status updated successfully!";
         } else {
-            $error = "❌ Error updating order status: " . $stmt->error;
+            $error = "Error updating order status: " . $stmt->error;
         }
         $stmt->close();
     }
@@ -665,7 +665,7 @@
                     <h5 class="page-title">Order Management</h5>
                 </div>
                 <div class="user-info">
-                    <span class="welcome-text d-none d-md-inline">Welcome,                                                                                                                                                     <?php echo htmlspecialchars($admin_name); ?></span>
+                    <span class="welcome-text d-none d-md-inline">Welcome,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <?php echo htmlspecialchars($admin_name); ?></span>
                     <div class="dropdown">
                         <div class="user-avatar dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
                             <?php echo htmlspecialchars($admin_initial); ?>
@@ -701,27 +701,27 @@
                     <div class="row align-items-center">
                         <div class="col-md-8">
                             <div class="status-filter">
-                                <a href="admin_orders.php" class="status-btn                                                                                                                                                         <?php echo $status_filter === 'all' ? 'active' : ''; ?>">
+                                <a href="admin_orders.php" class="status-btn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <?php echo $status_filter === 'all' ? 'active' : ''; ?>">
                                     All Orders
                                     <span class="status-badge"><?php echo array_sum($status_counts); ?></span>
                                 </a>
-                                <a href="admin_orders.php?status=pending" class="status-btn                                                                                                                                                                                       <?php echo $status_filter === 'pending' ? 'active' : ''; ?>">
+                                <a href="admin_orders.php?status=pending" class="status-btn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $status_filter === 'pending' ? 'active' : ''; ?>">
                                     <i class="bi bi-clock"></i> Pending
                                     <span class="status-badge"><?php echo $status_counts['pending'] ?? 0; ?></span>
                                 </a>
-                                <a href="admin_orders.php?status=confirmed" class="status-btn                                                                                                                                                                                           <?php echo $status_filter === 'confirmed' ? 'active' : ''; ?>">
+                                <a href="admin_orders.php?status=confirmed" class="status-btn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $status_filter === 'confirmed' ? 'active' : ''; ?>">
                                     <i class="bi bi-check-circle"></i> Confirmed
                                     <span class="status-badge"><?php echo $status_counts['confirmed'] ?? 0; ?></span>
                                 </a>
-                                <a href="admin_orders.php?status=preparing" class="status-btn                                                                                                                                                                                           <?php echo $status_filter === 'preparing' ? 'active' : ''; ?>">
+                                <a href="admin_orders.php?status=preparing" class="status-btn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $status_filter === 'preparing' ? 'active' : ''; ?>">
                                     <i class="bi bi-egg-fried"></i> Preparing
                                     <span class="status-badge"><?php echo $status_counts['preparing'] ?? 0; ?></span>
                                 </a>
-                                <a href="admin_orders.php?status=ready" class="status-btn                                                                                                                                                                                   <?php echo $status_filter === 'ready' ? 'active' : ''; ?>">
+                                <a href="admin_orders.php?status=ready" class="status-btn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $status_filter === 'ready' ? 'active' : ''; ?>">
                                     <i class="bi bi-check2-square"></i> Ready
                                     <span class="status-badge"><?php echo $status_counts['ready'] ?? 0; ?></span>
                                 </a>
-                                <a href="admin_orders.php?status=completed" class="status-btn                                                                                                                                                                                           <?php echo $status_filter === 'completed' ? 'active' : ''; ?>">
+                                <a href="admin_orders.php?status=completed" class="status-btn                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $status_filter === 'completed' ? 'active' : ''; ?>">
                                     <i class="bi bi-check2-all"></i> Completed
                                     <span class="status-badge"><?php echo $status_counts['completed'] ?? 0; ?></span>
                                 </a>
@@ -746,7 +746,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5><i class="bi bi-bag-check"></i> Orders</h5>
                         <div class="text-muted small">
-                            Showing                                                                       <?php echo count($orders); ?> order(s)
+                            Showing                                                                                                                                                                                                                                                                                         <?php echo count($orders); ?> order(s)
                         </div>
                     </div>
                     <div class="card-body p-0">

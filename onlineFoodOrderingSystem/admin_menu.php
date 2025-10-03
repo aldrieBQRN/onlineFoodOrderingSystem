@@ -19,11 +19,11 @@
             if (! empty($category_name)) {
                 if (isset($_POST['add_category'])) {
                     $sql             = "INSERT INTO menu_category (category_name, description) VALUES (?, ?)";
-                    $success_message = "🎉 Category added successfully!";
+                    $success_message = "Category added successfully!";
                 } else {
                     $category_id     = sanitize_input($_POST['category_id'], $conn);
                     $sql             = "UPDATE menu_category SET category_name = ?, description = ? WHERE category_id = ?";
-                    $success_message = "✅ Category updated successfully!";
+                    $success_message = "Category updated successfully!";
                 }
 
                 $stmt = $conn->prepare($sql);
@@ -37,11 +37,11 @@
                     $message    = $success_message;
                     $active_tab = 'categories';
                 } else {
-                    $error = "❌ Error: " . $stmt->error;
+                    $error = "Error: " . $stmt->error;
                 }
                 $stmt->close();
             } else {
-                $error = "⚠️ Category name is required!";
+                $error = "Category name is required!";
             }
         } elseif (isset($_POST['add_item']) || isset($_POST['update_item'])) {
             $category_id = sanitize_input($_POST['category_id'], $conn);
@@ -78,7 +78,7 @@
             if (! empty($item_name) && ! empty($price)) {
                 if (isset($_POST['add_item'])) {
                     $sql             = "INSERT INTO menu_item (category_id, item_name, price, badge, image_url) VALUES (?, ?, ?, ?, ?)";
-                    $success_message = "🎉 Menu item added successfully!";
+                    $success_message = "Menu item added successfully!";
                 } else {
                     $item_id = sanitize_input($_POST['item_id'], $conn);
 
@@ -101,7 +101,7 @@
                     }
 
                     $sql             = "UPDATE menu_item SET category_id = ?, item_name = ?, price = ?, badge = ?, image_url = ? WHERE item_id = ?";
-                    $success_message = "✅ Menu item updated successfully!";
+                    $success_message = "Menu item updated successfully!";
                 }
 
                 $stmt = $conn->prepare($sql);
@@ -115,11 +115,11 @@
                     $message    = $success_message;
                     $active_tab = 'items';
                 } else {
-                    $error = "❌ Error: " . $stmt->error;
+                    $error = "Error: " . $stmt->error;
                 }
                 $stmt->close();
             } else {
-                $error = "⚠️ Item name and price are required!";
+                $error = "Item name and price are required!";
             }
         } elseif (isset($_POST['delete_item'])) {
             $item_id = sanitize_input($_POST['item_id'], $conn);
@@ -145,10 +145,10 @@
             $stmt->bind_param("i", $item_id);
 
             if ($stmt->execute()) {
-                $message    = "🗑️ Menu item deleted successfully!";
+                $message    = "Menu item deleted successfully!";
                 $active_tab = 'items';
             } else {
-                $error = "❌ Error deleting menu item: " . $stmt->error;
+                $error = "Error deleting menu item: " . $stmt->error;
             }
             $stmt->close();
         } elseif (isset($_POST['delete_category'])) {
@@ -169,14 +169,14 @@
                 $stmt->bind_param("i", $category_id);
 
                 if ($stmt->execute()) {
-                    $message    = "🗑️ Category deleted successfully!";
+                    $message    = "Category deleted successfully!";
                     $active_tab = 'categories';
                 } else {
-                    $error = "❌ Error deleting category: " . $stmt->error;
+                    $error = "Error deleting category: " . $stmt->error;
                 }
                 $stmt->close();
             } else {
-                $error = "❌ Cannot delete category. There are {$row['item_count']} menu items associated with it.";
+                $error = "Cannot delete category. There are {$row['item_count']} menu items associated with it.";
             }
         }
     }
@@ -184,7 +184,7 @@
     // Function to handle image upload
     function handleImageUpload($file)
     {
-        $upload_dir    = 'uploads/';
+        $upload_dir    = 'images/';
         $max_file_size = 5 * 1024 * 1024; // 5MB
         $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
@@ -200,12 +200,12 @@
 
         // Validate file size
         if ($file_size > $max_file_size) {
-            return ['success' => false, 'error' => '❌ File size too large. Maximum size is 5MB.'];
+            return ['success' => false, 'error' => 'File size too large. Maximum size is 5MB.'];
         }
 
         // Validate file type
         if (! in_array($file_type, $allowed_types)) {
-            return ['success' => false, 'error' => '❌ Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.'];
+            return ['success' => false, 'error' => 'Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.'];
         }
 
         // Generate unique filename
@@ -217,7 +217,7 @@
         if (move_uploaded_file($file_tmp, $file_path)) {
             return ['success' => true, 'file_path' => $file_path];
         } else {
-            return ['success' => false, 'error' => '❌ Failed to upload file.'];
+            return ['success' => false, 'error' => 'Failed to upload file.'];
         }
     }
 
@@ -748,7 +748,7 @@
                     <h5 class="page-title">Menu Management</h5>
                 </div>
                 <div class="user-info">
-                    <span class="welcome-text d-none d-md-inline">Welcome,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <?php echo htmlspecialchars($admin_name); ?></span>
+                    <span class="welcome-text d-none d-md-inline">Welcome,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <?php echo htmlspecialchars($admin_name); ?></span>
                     <div class="dropdown">
                         <div class="user-avatar dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
                             <?php echo htmlspecialchars($admin_initial); ?>
@@ -810,13 +810,13 @@
                 <!-- Tabs -->
                 <ul class="nav nav-tabs" id="menuTabs">
                     <li class="nav-item">
-                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $active_tab === 'items' ? 'active' : ''; ?>"
+                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <?php echo $active_tab === 'items' ? 'active' : ''; ?>"
                            href="#items" data-bs-toggle="tab">
                            <i class="bi bi-cup-hot"></i> Menu Items
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $active_tab === 'categories' ? 'active' : ''; ?>"
+                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <?php echo $active_tab === 'categories' ? 'active' : ''; ?>"
                            href="#categories" data-bs-toggle="tab">
                            <i class="bi bi-tags"></i> Categories
                         </a>
@@ -825,7 +825,7 @@
 
                 <div class="tab-content">
                     <!-- Menu Items Tab -->
-                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <?php echo $active_tab === 'items' ? 'show active' : ''; ?>" id="items">
+                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <?php echo $active_tab === 'items' ? 'show active' : ''; ?>" id="items">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5><i class="bi bi-cup-hot"></i> Menu Items</h5>
@@ -919,7 +919,7 @@
                     </div>
 
                     <!-- Categories Tab -->
-                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <?php echo $active_tab === 'categories' ? 'show active' : ''; ?>" id="categories">
+                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <?php echo $active_tab === 'categories' ? 'show active' : ''; ?>" id="categories">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5><i class="bi bi-tags"></i> Categories</h5>
