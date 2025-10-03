@@ -288,15 +288,17 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Styles */
+         /* Sidebar Styles */
         .admin-sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--dark) 0%, #2a4a2a 100%);
             color: white;
+            transition: var(--transition);
             position: fixed;
             height: 100vh;
             z-index: 1000;
             box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
         }
 
         .sidebar-logo {
@@ -304,6 +306,9 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
             height: var(--header-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .sidebar-logo h4 {
@@ -332,6 +337,7 @@
             font-weight: 500;
             display: flex;
             align-items: center;
+            white-space: nowrap;
         }
 
         .nav-link:hover, .nav-link.active {
@@ -341,12 +347,14 @@
 
         .nav-link.active {
             background: var(--primary);
+            box-shadow: 0 4px 12px rgba(50, 205, 50, 0.3);
         }
 
         .nav-link i {
             width: 22px;
             margin-right: 12px;
             font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
         /* Main Content */
@@ -674,11 +682,13 @@
         <div class="mobile-overlay" id="mobileOverlay"></div>
 
         <!-- Sidebar -->
+        <!-- Sidebar -->
         <div class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-logo">
                 <h4>BENTE SAIS</h4>
                 <small>Admin Panel</small>
             </div>
+
             <nav class="sidebar-nav">
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -738,8 +748,17 @@
                     <h5 class="page-title">Menu Management</h5>
                 </div>
                 <div class="user-info">
-                    <span class="welcome-text d-none d-md-inline">Welcome,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <?php echo htmlspecialchars($admin_name); ?></span>
-                    <div class="user-avatar"><?php echo htmlspecialchars($admin_initial); ?></div>
+                    <span class="welcome-text d-none d-md-inline">Welcome,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <?php echo htmlspecialchars($admin_name); ?></span>
+                    <div class="dropdown">
+                        <div class="user-avatar dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
+                            <?php echo htmlspecialchars($admin_initial); ?>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
 
@@ -791,13 +810,13 @@
                 <!-- Tabs -->
                 <ul class="nav nav-tabs" id="menuTabs">
                     <li class="nav-item">
-                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                 <?php echo $active_tab === 'items' ? 'active' : ''; ?>"
+                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $active_tab === 'items' ? 'active' : ''; ?>"
                            href="#items" data-bs-toggle="tab">
                            <i class="bi bi-cup-hot"></i> Menu Items
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                 <?php echo $active_tab === 'categories' ? 'active' : ''; ?>"
+                        <a class="nav-link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $active_tab === 'categories' ? 'active' : ''; ?>"
                            href="#categories" data-bs-toggle="tab">
                            <i class="bi bi-tags"></i> Categories
                         </a>
@@ -806,7 +825,7 @@
 
                 <div class="tab-content">
                     <!-- Menu Items Tab -->
-                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                         <?php echo $active_tab === 'items' ? 'show active' : ''; ?>" id="items">
+                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <?php echo $active_tab === 'items' ? 'show active' : ''; ?>" id="items">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5><i class="bi bi-cup-hot"></i> Menu Items</h5>
@@ -900,7 +919,7 @@
                     </div>
 
                     <!-- Categories Tab -->
-                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                         <?php echo $active_tab === 'categories' ? 'show active' : ''; ?>" id="categories">
+                    <div class="tab-pane fade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <?php echo $active_tab === 'categories' ? 'show active' : ''; ?>" id="categories">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5><i class="bi bi-tags"></i> Categories</h5>
