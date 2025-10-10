@@ -57,7 +57,7 @@
                         <?php else: ?>
                             <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal"
                                     data-bs-target="#loginModal" data-bs-dismiss="offcanvas">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                                <i class="bi bi-box-arrow-in-right me-"></i> Login
                             </button>
                         <?php endif; ?>
                     </div>
@@ -79,14 +79,14 @@
                                 </a>
                                 <!-- In both desktop and mobile dropdown menus, update the dropdown items: -->
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
                                     <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                    <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                                 </ul>
                             </div>
                         <?php else: ?>
-                            <button class="btn btn-theme rounded-pill px-3" data-bs-toggle="modal"
+                            <button class="btn btn-theme rounded-pill px-4" data-bs-toggle="modal"
                                     data-bs-target="#loginModal">
                                 Login
                             </button>
@@ -199,7 +199,7 @@
         <div class="container">
             <p class="mb-2">&copy; 2025 Bente Sais Lomihan. All Rights Reserved.</p>
             <div>
-                <a href="#" class="me-3"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.facebook.com/ajharafoodhaus" class="me-3"><i class="bi bi-facebook"></i></a>
                 <a href="#" class="me-3"><i class="bi bi-instagram"></i></a>
                 <a href="#"><i class="bi bi-twitter"></i></a>
             </div>
