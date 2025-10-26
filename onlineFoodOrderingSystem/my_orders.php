@@ -1,9 +1,9 @@
 <?php
-    include 'config.php';
+    include 'includes/config.php'; // <-- UPDATED
 
     // Check if user is logged in
     if (! isset($_SESSION['user_id'])) {
-        header('Location: login.php');
+        header('Location: index.php'); // <-- UPDATED (Redirect to home to show login)
         exit;
     }
 
@@ -32,11 +32,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="bootstrapfile/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/bootstrapfile/css/bootstrap.min.css"> <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <title>My Orders - Bente Sais Lomihan</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <title>My Orders - Bente Sais Lomihan</title>
     <style>
     .orders-container {
         max-width: 1200px;
@@ -79,6 +77,7 @@
         border-radius: 20px;
         font-weight: 600;
         font-size: 0.85rem;
+        white-space: nowrap;
     }
 
     .status-pending {
@@ -113,14 +112,18 @@
 
     .order-item {
         display: flex;
-        justify-content: between;
         align-items: center;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #f8f9fa;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
     }
 
     .order-item:last-child {
         border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .order-item:first-child {
+        padding-top: 0;
     }
 
     .item-image {
@@ -129,12 +132,15 @@
         border-radius: 8px;
         object-fit: cover;
         margin-right: 1rem;
+        background: #f4f4f4;
     }
 
     .empty-state {
         text-align: center;
         padding: 4rem 2rem;
         color: #6c757d;
+        background: #fff;
+        border-radius: 16px;
     }
 
     .empty-state i {
@@ -174,7 +180,7 @@
     .timeline::before {
         content: '';
         position: absolute;
-        left: 0;
+        left: 5px; /* Centered on the dot */
         top: 0;
         bottom: 0;
         width: 2px;
@@ -185,6 +191,9 @@
         position: relative;
         margin-bottom: 1.5rem;
     }
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
 
     .timeline-item::before {
         content: '';
@@ -194,24 +203,22 @@
         width: 12px;
         height: 12px;
         border-radius: 50%;
-        background: #32CD32;
-        border: 3px solid white;
-        box-shadow: 0 0 0 2px #32CD32;
+        background: #e9ecef;
+        border: 2px solid white;
+        z-index: 1;
     }
 
-    .timeline-item.completed::before {
+    .timeline-item.completed::before,
+    .timeline-item.current::before {
         background: #32CD32;
-        box-shadow: 0 0 0 2px #32CD32;
+        box-shadow: 0 0 0 3px #32CD32;
     }
-
+    
     .timeline-item.pending::before {
-        background: #6c757d;
-        box-shadow: 0 0 0 2px #6c757d;
+        background: #adb5bd;
     }
 
     .timeline-item.current::before {
-        background: #32CD32;
-        box-shadow: 0 0 0 2px #32CD32;
         animation: pulse 2s infinite;
     }
 
@@ -234,6 +241,38 @@
         gap: 0.5rem;
         flex-wrap: wrap;
     }
+    
+    .items-toggle {
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .items-toggle .bi-chevron-down {
+        transition: transform 0.3s ease;
+    }
+
+    .items-toggle[aria-expanded="true"] .bi-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    /* Modal Styling */
+    #orderDetailsModal .modal-body {
+        background: #f8f9fa;
+    }
+    #orderDetailsModal .list-group-item {
+        background: #fff;
+    }
+    #orderDetailsModal .item-image-modal {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-right: 1rem;
+    }
+
+    /* REMOVED #modalSpinner CSS from here. 
+      It's no longer a separate element.
+    */
 
     @media (max-width: 768px) {
         .order-meta {
@@ -242,20 +281,29 @@
 
         .order-actions {
             flex-direction: column;
+            width: 100%;
+            margin-top: 1rem;
         }
 
         .order-actions .btn {
             width: 100%;
+        }
+        
+        .order-footer {
+            flex-direction: column;
+            align-items: flex-start !important;
         }
     }
     </style>
 </head>
 
 <body>
-    <!-- Navigation (same as index.php) -->
     <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container py-3">
-            <a class="navbar-brand fw-bold" href="index.php">BENTESAIS</a>
+            <a class="navbar-brand fw-bold fs-3" href="index.php">
+                <span style="color: #32cd32;">Quick</span>Crave
+            </a>
+            
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                 aria-controls="offcanvasNavbar">
@@ -281,12 +329,11 @@
                             </a>
                             <ul class="dropdown-menu w-100" aria-labelledby="offcanvasUserDropdown">
                                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
+                                <li><a class="dropdown-item active" href="my_orders.php">My Orders</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                            </ul>
+                                <li><a class="dropdown-item" href="actions/logout.php">Logout</a></li> </ul>
                         </div>
                     </div>
 
@@ -306,12 +353,10 @@
                                 <?php echo htmlspecialchars($user_name); ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                             </ul>
                         </div>
                     </div>
@@ -337,8 +382,11 @@
                     <?php if ($orders_result->num_rows > 0): ?>
                     <div class="orders-list">
                         <?php while ($order = $orders_result->fetch_assoc()):
-                                // Get order items
-                                $items_sql  = "SELECT * FROM order_items WHERE order_id = ?";
+                                // **FIXED QUERY**: Join order_items with menu_item ON item_name to get image_url
+                                $items_sql  = "SELECT oi.*, m.image_url 
+                                               FROM order_items oi 
+                                               LEFT JOIN menu_item m ON oi.item_name = m.item_name 
+                                               WHERE oi.order_id = ?";
                                 $items_stmt = $conn->prepare($items_sql);
                                 $items_stmt->bind_param("i", $order['order_id']);
                                 $items_stmt->execute();
@@ -352,67 +400,82 @@
                                 $contact = $contact_stmt->get_result()->fetch_assoc();
                             ?>
 
-			                        <div class="order-card">
-			                            <div class="order-header">
-			                                <div class="d-flex justify-content-between align-items-start">
-			                                    <div>
-			                                        <h5 class="fw-bold mb-1">Order #<?php echo $order['order_number']; ?></h5>
-			                                        <p class="text-muted mb-0">
-			                                            <i class="bi bi-calendar me-1"></i>
-			                                            <?php echo date('F j, Y g:i A', strtotime($order['created_at'])); ?>
-			                                        </p>
-			                                    </div>
-			                                    <span class="status-badge status-<?php echo $order['order_status']; ?>">
-			                                        <?php echo ucfirst($order['order_status']); ?>
-			                                    </span>
-			                                </div>
-			                            </div>
+                        <div class="order-card" id="order-card-<?php echo $order['order_id']; ?>">
+                            <div class="order-header">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="fw-bold mb-1">Order #<?php echo $order['order_number']; ?></h5>
+                                        <p class="text-muted mb-0">
+                                            <i class="bi bi-calendar me-1"></i>
+                                            <?php echo date('F j, Y g:i A', strtotime($order['created_at'])); ?>
+                                        </p>
+                                    </div>
+                                    <span
+                                        class="status-badge status-<?php echo htmlspecialchars($order['order_status']); ?>">
+                                        <?php echo ucfirst(htmlspecialchars($order['order_status'])); ?>
+                                    </span>
+                                </div>
+                            </div>
 
-			                            <div class="order-body">
-			                                <div class="order-meta">
-			                                    <div class="meta-item">
-			                                        <span class="meta-label">Order Type</span>
-			                                        <span class="meta-value"><?php echo $order['order_type']; ?></span>
-			                                    </div>
-			                                    <div class="meta-item">
-			                                        <span class="meta-label">Payment Method</span>
-			                                        <span class="meta-value"><?php echo $order['payment_method']; ?></span>
-			                                    </div>
-			                                    <div class="meta-item">
-			                                        <span class="meta-label">Total Amount</span>
-			                                        <span
-			                                            class="meta-value fw-bold text-success">₱<?php echo number_format($order['total_amount'], 2); ?></span>
-			                                    </div>
-			                                    <div class="meta-item">
-			                                        <span class="meta-label">Contact</span>
-			                                        <span
-			                                            class="meta-value"><?php echo htmlspecialchars($contact['first_name'] . ' ' . $contact['last_name']); ?></span>
-			                                    </div>
-			                                </div>
-
-			                                <h6 class="fw-semibold mb-3">Order Items (<?php echo $order['total_quantity']; ?> items)
-			                                </h6>
-			                                <div class="order-items">
-			                                    <?php while ($item = $items_result->fetch_assoc()): ?>
-			                                    <div class="order-item">
-			                                        <div class="flex-grow-1">
-			                                            <div class="fw-semibold"><?php echo htmlspecialchars($item['item_name']); ?>
-			                                            </div>
-			                                            <div class="text-muted small">
-			                                                ₱<?php echo number_format($item['unit_price'], 2); ?> ×
-			                                                <?php echo $item['quantity']; ?>
-			                                            </div>
-			                                        </div>
-			                                        <div class="fw-bold">
-			                                            ₱<?php echo number_format($item['total_price'], 2); ?>
-			                                        </div>
-			                                    </div>
-			                                    <?php endwhile; ?>
+                            <div class="order-body">
+                                <div class="order-meta">
+                                    <div class="meta-item">
+                                        <span class="meta-label">Order Type</span>
+                                        <span class="meta-value"><?php echo htmlspecialchars($order['order_type']); ?></span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">Payment Method</span>
+                                        <span class="meta-value"><?php echo htmlspecialchars($order['payment_method']); ?></span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">Total Amount</span>
+                                        <span
+                                            class="meta-value fw-bold text-success">₱<?php echo number_format($order['total_amount'], 2); ?></span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">Contact</span>
+                                        <span
+                                            class="meta-value"><?php echo htmlspecialchars($contact['first_name'] . ' ' . $contact['last_name']); ?></span>
+                                    </div>
                                 </div>
 
-                                <!-- Order Progress Timeline -->
+                                <h6
+                                    class="fw-semibold mb-3 d-flex justify-content-between align-items-center items-toggle"
+                                    data-bs-toggle="collapse"
+                                    href="#orderItems-<?php echo $order['order_id']; ?>" role="button"
+                                    aria-expanded="false"
+                                    aria-controls="orderItems-<?php echo $order['order_id']; ?>">
+                                    <span>
+                                        <i class="bi bi-receipt me-2"></i>Order Items
+                                        (<?php echo $order['total_quantity']; ?>)
+                                    </span>
+                                    <i class="bi bi-chevron-down"></i>
+                                </h6>
+                                <div class="collapse" id="orderItems-<?php echo $order['order_id']; ?>">
+                                    <div class="order-items mb-4">
+                                        <?php while ($item = $items_result->fetch_assoc()): ?>
+                                        <div class="order-item">
+                                            <img src="<?php echo !empty($item['image_url']) ? htmlspecialchars($item['image_url']) : 'assets/images/placeholder.png'; ?>" alt="<?php echo htmlspecialchars($item['item_name']); ?>"
+                                                class="item-image">
+                                            <div class="flex-grow-1">
+                                                <div class="fw-semibold"><?php echo htmlspecialchars($item['item_name']); ?>
+                                                </div>
+                                                <div class="text-muted small">
+                                                    ₱<?php echo number_format($item['unit_price'], 2); ?> ×
+                                                    <?php echo $item['quantity']; ?>
+                                                </div>
+                                            </div>
+                                            <div class="fw-bold ms-3">
+                                                ₱<?php echo number_format($item['total_price'], 2); ?>
+                                            </div>
+                                        </div>
+                                        <?php endwhile; ?>
+                                    </div>
+                                </div>
+
+
                                 <div class="mt-4">
-                                    <h6 class="fw-semibold mb-3">Order Status</h6>
+                                    <h6 class="fw-semibold mb-3"><i class="bi bi-truck me-2"></i>Order Status</h6>
                                     <div class="timeline">
                                         <?php
                                             $statuses = [
@@ -422,35 +485,59 @@
                                                 'ready'     => 'Ready for Pickup/Delivery',
                                                 'completed' => 'Order Completed',
                                             ];
+                                            
+                                            // Handle cancelled state
+                                            if ($order['order_status'] == 'cancelled') {
+                                                $statuses = [
+                                                    'pending' => 'Order Received',
+                                                    'cancelled' => 'Order Cancelled'
+                                                ];
+                                            }
 
                                             $current_status = $order['order_status'];
-                                            $status_found   = false;
+                                            $status_keys    = array_keys($statuses);
+                                            $current_index  = array_search($current_status, $status_keys);
 
                                             foreach ($statuses as $status => $label):
-                                                $is_completed = array_search($status, array_keys($statuses)) < array_search($current_status, array_keys($statuses));
-                                                $is_current   = $status === $current_status;
-                                                $class        = $is_completed ? 'completed' : ($is_current ? 'current' : 'pending');
+                                                $status_index = array_search($status, $status_keys);
+                                                
+                                                $is_completed = $status_index < $current_index;
+                                                $is_current   = $status_index == $current_index;
+                                                $is_pending   = $status_index > $current_index;
+
+                                                $class = '';
+                                                if ($is_completed) $class = 'completed';
+                                                if ($is_current) $class = 'current';
+                                                if ($is_pending) $class = 'pending';
+                                                
+                                                // Special case for cancelled
+                                                if ($current_status == 'cancelled' && $status == 'cancelled') {
+                                                    $class = 'current text-danger';
+                                                } elseif ($current_status == 'cancelled' && $status != 'cancelled') {
+                                                    $class = 'completed';
+                                                }
+
                                             ?>
-			                                        <div class="timeline-item<?php echo $class; ?>">
-			                                            <div class="d-flex justify-content-between align-items-center">
-			                                                <div>
-			                                                    <div class="fw-semibold"><?php echo $label; ?></div>
-			                                                    <?php if ($is_completed || $is_current): ?>
-			                                                    <small class="text-muted">
-			                                                        <?php
-                                                                            if ($is_current && $status === 'pending') {
-                                                                                echo 'Just now';
-                                                                            } elseif ($is_completed) {
-                                                                            echo 'Completed';
-                                                                        } else {
-                                                                            echo 'In progress';
-                                                                        }
-                                                                    ?>
+                                        <div class="timeline-item <?php echo $class; ?>">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div class="fw-semibold"><?php echo $label; ?></div>
+                                                    <small class="text-muted">
+                                                        <?php
+                                                            if ($status === 'pending' && ($is_completed || $is_current)) {
+                                                                echo date('F j, Y g:i A', strtotime($order['created_at']));
+                                                            } elseif ($is_completed) {
+                                                                echo 'Completed';
+                                                            } elseif ($is_current) {
+                                                                echo 'In Progress';
+                                                            }
+                                                        ?>
                                                     </small>
-                                                    <?php endif; ?>
                                                 </div>
                                                 <?php if ($is_completed): ?>
                                                 <i class="bi bi-check-circle-fill text-success"></i>
+                                                <?php elseif ($current_status == 'cancelled' && $status == 'cancelled'): ?>
+                                                <i class="bi bi-x-circle-fill text-danger"></i>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -460,17 +547,19 @@
                             </div>
 
                             <div class="order-footer">
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div
+                                    class="d-flex justify-content-between align-items-center flex-wrap w-100">
                                     <small class="text-muted">
-                                        Order ID:                                                                                                                                                    <?php echo $order['order_id']; ?>
+                                        Order ID: <?php echo $order['order_id']; ?>
                                     </small>
                                     <div class="order-actions">
                                         <button class="btn btn-outline-primary btn-sm"
-                                            onclick="viewOrderDetails(<?php echo $order['order_id']; ?>)">
+                                            onclick="viewOrderDetails(<?php echo $order['order_id']; ?>, '<?php echo $order['order_number']; ?>')">
                                             <i class="bi bi-eye me-1"></i>View Details
                                         </button>
                                         <?php if ($order['order_status'] === 'pending'): ?>
                                         <button class="btn btn-outline-danger btn-sm"
+                                            id="cancel-btn-<?php echo $order['order_id']; ?>"
                                             onclick="cancelOrder(<?php echo $order['order_id']; ?>)">
                                             <i class="bi bi-x-circle me-1"></i>Cancel Order
                                         </button>
@@ -504,47 +593,224 @@
         </div>
     </main>
 
-    <?php include 'modals.php'; ?>
-    <script src="bootstrapfile/js/bootstrap.bundle.min.js"></script>
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0" style="border-radius: 16px;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="orderDetailsModalLabel">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 position-relative">
+                    
+                    <div id="modalBodyContent">
+                        </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <?php include 'includes/modals.php'; ?> <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script> 
+    
     <script>
-    function viewOrderDetails(orderId) {
-        // You can implement a modal or redirect to order details page
-        alert('Viewing details for order #' + orderId);
-        // window.location.href = 'order_details.php?id=' + orderId;
+    const orderDetailsModal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+    const modalBody = document.getElementById('modalBodyContent');
+    const modalTitle = document.getElementById('orderDetailsModalLabel');
+    
+    // Define the spinner HTML
+    const modalSpinnerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; min-height: 250px; background: #f8f9fa;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`;
+
+    /**
+     * Fetches full order details and displays them in a modal.
+     * **FIXED** to work with your get_order_details.php and schema
+     */
+    async function viewOrderDetails(orderId, orderNumber) {
+        modalTitle.textContent = `Details for Order #${orderNumber}`;
+        modalBody.innerHTML = modalSpinnerHTML; // <-- FIX: Inject spinner HTML
+        orderDetailsModal.show();
+
+        try {
+            // This file must be in the 'actions' folder
+            const response = await fetch(`actions/get_order_details.php?order_id=${orderId}`); // <-- UPDATED
+            
+            if (!response.ok) {
+                // Try to get error text from server for more clarity
+                let errorMsg = 'Network response was not ok';
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.error || errorMsg;
+                } catch (e) {
+                    // response was not JSON (e.g., 500 server error HTML)
+                    errorMsg = `Server error (Status: ${response.status})`;
+                }
+                throw new Error(errorMsg);
+            }
+            
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Build Modal HTML
+            let itemsHtml = '';
+            data.items.forEach(item => {
+                // **FIXED**: Use image_url and placeholder
+                itemsHtml += `
+                    <li class="list-group-item d-flex align-items-center">
+                        <img src="${item.image_url || 'assets/images/placeholder.png'}" class="item-image-modal" alt="${item.item_name}"> <div class="flex-grow-1">
+                            <div class="fw-semibold">${item.item_name}</div>
+                            <small class="text-muted">₱${parseFloat(item.unit_price).toFixed(2)} x ${item.quantity}</small>
+                        </div>
+                        <div class="fw-bold">₱${parseFloat(item.total_price).toFixed(2)}</div>
+                    </li>
+                `;
+            });
+
+            const contact = data.contact;
+            const order = data.order;
+            const address = data.address; // Get address data
+            
+            const orderDate = new Date(order.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+
+            // **FIXED**: Added Address and corrected contact.phone_number
+            let addressHtml = '';
+            if (order.order_type === 'Delivery' && address) {
+                addressHtml = `
+                <li class="list-group-item d-flex flex-column">
+                    <span><strong>Delivery Address:</strong></span>
+                    <small class="text-muted">
+                        ${address.street_address}, ${address.barangay}, ${address.city}, ${address.province}
+                        ${address.zip_code ? `, ${address.zip_code}` : ''}
+                    </small>
+                    ${address.landmarks ? `<small class="text-muted"><strong>Landmarks:</strong> ${address.landmarks}</small>` : ''}
+                </li>`;
+            }
+
+            // FIX: This new HTML will completely replace the spinner
+            modalBody.innerHTML = `
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h6 class="fw-bold mb-3">Order Summary</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between"><span>Order ID:</span> <strong>#${order.order_number}</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Order Date:</span> <strong>${orderDate}</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Order Type:</span> <strong>${order.order_type}</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Payment:</span> <strong>${order.payment_method}</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Status:</span> <strong class="text-capitalize status-badge status-${order.order_status}">${order.order_status}</strong></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h6 class="fw-bold mb-3">Contact Information</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between"><span>Name:</span> <strong>${contact.first_name} ${contact.last_name}</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Phone:</span> <strong>${contact.phone_number}</strong></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Email:</span> <strong>${contact.email}</strong></li>
+                                ${addressHtml}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-4">
+                    <h6 class="fw-bold mb-3">Items Ordered (${data.items.length})</h6>
+                    <ul class="list-group list-group-flush">
+                        ${itemsHtml}
+                    </ul>
+                    <div class="d-flex justify-content-end align-items-center mt-3">
+                        <span class="text-muted me-2">Total:</span>
+                        <span class="fw-bold fs-5 text-success">₱${parseFloat(order.total_amount).toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+
+        } catch (error) {
+            console.error('Error fetching order details:', error);
+            // FIX: This error message will completely replace the spinner
+            modalBody.innerHTML = `<div class="alert alert-danger m-4">Failed to load order details: ${error.message}</div>`;
+        } 
+        // FIX: No 'finally' block is needed anymore
     }
 
-    function cancelOrder(orderId) {
-        if (confirm('Are you sure you want to cancel this order?')) {
-            // Implement cancel order functionality
-            fetch('cancel_order.php', {
+
+    /**
+     * Cancels an order. Assumes your 'cancel_order.php' file works.
+     */
+    async function cancelOrder(orderId) {
+        const cancelBtn = document.getElementById(`cancel-btn-${orderId}`);
+        if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+            cancelBtn.disabled = true;
+            cancelBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cancelling...';
+
+            try {
+                // This file must be in the 'actions' folder
+                const response = await fetch('actions/cancel_order.php', { // <-- UPDATED
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        order_id: orderId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Order cancelled successfully');
-                        location.reload();
-                    } else {
-                        alert('Failed to cancel order: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while cancelling the order');
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: orderId })
                 });
+                
+                const data = await response.json();
+
+                if (data.success) {
+                    const orderCard = document.getElementById(`order-card-${orderId}`);
+                    orderCard.querySelector('.status-badge').textContent = 'Cancelled';
+                    orderCard.querySelector('.status-badge').className = 'status-badge status-cancelled';
+                    cancelBtn.remove();
+                    alert('Order cancelled successfully');
+                } else {
+                    throw new Error(data.message || 'Unknown error');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to cancel order: ' + error.message);
+                cancelBtn.disabled = false;
+                cancelBtn.innerHTML = '<i class="bi bi-x-circle me-1"></i>Cancel Order';
+            }
         }
     }
 
-    function reorder(orderId) {
-        // Implement reorder functionality
-        alert('Adding items from order #' + orderId + ' to cart');
-        // You can implement this to fetch order items and add them to cart
+    /**
+     * Adds items from an old order to the current cart.
+     */
+    async function reorder(orderId) {
+        if (confirm('This will add all items from order #' + orderId + ' to your cart. Proceed?')) {
+            
+            try {
+                // This file must be in the 'actions' folder
+                const response = await fetch('actions/reorder.php', { // <-- UPDATED
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: orderId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`Success! ${data.items_added} items were added to your cart.`);
+                    window.location.href = 'index.php'; 
+                } else {
+                    throw new Error(data.message || 'Could not add items to cart.');
+                }
+
+            } catch (error) {
+                console.error('Error reordering:', error);
+                alert('An error occurred while reordering: ' + error.message);
+            }
+        }
     }
     </script>
 </body>

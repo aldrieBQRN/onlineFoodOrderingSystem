@@ -1,5 +1,5 @@
 <?php
-    include 'config.php';
+    include 'includes/config.php'; // <-- CORRECT
     $is_home = true; // Flag to indicate this is the home/menu page
 ?>
 
@@ -10,10 +10,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="bootstrapfile/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrapfile/css/bootstrap.min.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css"> 
     <title>Bente Sais Lomihan</title>
 </head>
 
@@ -22,7 +22,7 @@
     <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container py-3">
             <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">BENTE</span>SAIS
+                <span style="color: #32cd32;">Quick</span>Crave
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -51,7 +51,7 @@
                                     <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                                     <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                    <li><a class="dropdown-item" href="actions/logout.php">Logout</a></li> 
                                 </ul>
                             </div>
                         <?php else: ?>
@@ -77,12 +77,11 @@
                                     <i class="bi bi-person-circle me-1"></i>
                                     <?php echo htmlspecialchars($_SESSION['full_name']); ?>
                                 </a>
-                                <!-- In both desktop and mobile dropdown menus, update the dropdown items: -->
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                     <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
+                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                                 </ul>
                             </div>
                         <?php else: ?>
@@ -122,6 +121,8 @@
                             $items    = $conn->query($item_sql);
 
                             while ($item = $items->fetch_assoc()) {
+                                // NOTE: This path comes from your database.
+                                // Make sure $item['image_url'] is 'uploads/products/your-image.jpg'
                                 echo '
                             <div class="col-md-4">
                             <div class="card">
@@ -179,7 +180,6 @@
                     </div>
                 </div>
             </div>
-        </section>
     </main>
 
     <div class="cart-btn-container d-flex align-items-center shadow-lg">
@@ -206,10 +206,11 @@
         </div>
     </footer>
 
-    <?php include 'modals.php'; ?>
-    <script src="bootstrapfile/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <?php include 'includes/modals.php'; // <-- CORRECT ?>
 
+    <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script> 
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/script.js"></script> 
 </body>
 
 </html>

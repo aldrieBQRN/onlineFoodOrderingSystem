@@ -1,0 +1,629 @@
+:root {
+  --bs-primary: #32cd32;
+  --bs-primary-hover: #28a428;
+  --bs-background: #f7f1f4;
+  --bs-dark-footer: #222;
+  --bs-light-text: #aaa;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  padding-top: 80px;
+  padding-bottom: 70px;
+  background-color: var(--bs-background);
+}
+
+.navbar {
+  background-color: var(--bs-background) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.offcanvas .nav-link {
+  color: #000000 !important;
+  transition: color 0.3s ease;
+}
+
+.offcanvas .nav-link:hover {
+  color: var(--bs-primary) !important;
+}
+
+.btn-theme {
+  background-color: var(--bs-primary);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-theme:hover {
+  background-color: var(--bs-primary-hover);
+  transform: translateY(-2px);
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.badge-theme {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+.hero {
+  background: url("images/hero.jpg") center/cover no-repeat;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 100px 20px;
+}
+
+footer {
+  background: var(--bs-dark-footer);
+  color: var(--bs-light-text);
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--bs-primary);
+}
+
+/* Cart Sidebar Styles */
+.cart-sidebar {
+  position: sticky;
+  top: 120px; /* sticks right below the navbar */
+  height: calc(100vh - 140px); /* adjusted to avoid overflow */
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  z-index: 999; /* ensure it stays above content */
+}
+
+.cart-header {
+  background: var(--bs-primary);
+  color: white;
+  padding: 1rem;
+  border-radius: 12px 12px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.cart-body {
+  padding: 1rem;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+}
+
+.cart-footer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: 1px solid #eee;
+  padding: 1rem;
+  border-radius: 0 0 12px 12px;
+}
+
+.cart-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.cart-item:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+}
+
+.cart-item-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.cart-item-price {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--bs-primary);
+  background: white;
+  color: var(--bs-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.quantity-btn:hover {
+  background: var(--bs-primary);
+  color: white;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.empty-cart i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+/* Mobile sticky bottom cart bar */
+.cart-btn-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: white;
+  border-top: 1px solid #eee;
+  padding: 15px 20px;
+  display: none; /* Hidden by default */
+}
+
+.cart-btn-container .btn {
+  border: 1px solid #ddd;
+  background: white;
+  color: #333;
+}
+
+.cart-btn-container .btn:hover {
+  background: #f8f9fa;
+}
+
+.cart-btn-container .btn-theme {
+  background: var(--bs-primary);
+  color: white;
+  border: none;
+}
+
+.cart-btn-container .btn-theme:hover {
+  background: var(--bs-primary-hover);
+}
+
+/* Checkout Card Styles */
+.checkout-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.checkout-card .card-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.25rem;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.checkout-card .card-header h6 {
+  color: #495057;
+  font-size: 1rem;
+}
+
+.checkout-card .card-body {
+  padding: 1.5rem;
+}
+
+.checkout-card .card-footer {
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Improved form styles for checkout modal */
+#checkoutForm .form-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+#checkoutForm .form-control,
+#checkoutForm .form-select {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+#checkoutForm .form-control:focus,
+#checkoutForm .form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(50, 205, 50, 0.15);
+  outline: none;
+  background-color: #fff;
+}
+
+#checkoutForm .form-control::placeholder {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+#addressField .row {
+  margin-bottom: 0.5rem;
+}
+
+/* Order Summary Card Specific Styles */
+#checkoutSummary .list-group-item {
+  border: none;
+  border-bottom: 1px solid #e9ecef;
+  padding: 0.75rem 0;
+  background: transparent;
+}
+
+#checkoutSummary .list-group-item:last-child {
+  border-bottom: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  body {
+    padding-bottom: 100px; /* Add space for sticky cart bar */
+  }
+
+  .cart-sidebar {
+    position: static;
+    height: auto;
+    margin-top: 2rem;
+    display: none;
+  }
+
+  .cart-body {
+    max-height: 400px;
+  }
+
+  .cart-btn-container {
+    display: flex; /* Show only on mobile */
+  }
+}
+
+/* Desktop - hide mobile cart bar */
+@media (min-width: 992px) {
+  body {
+    padding-bottom: 70px; /* Reset to original padding */
+  }
+
+  .cart-btn-container {
+    display: none !important; /* Force hide on desktop */
+  }
+
+  /* Make order summary card sticky on desktop */
+  .checkout-card.sticky-top {
+    position: sticky;
+    z-index: 5;
+  }
+}
+
+/* Mobile cart toggle */
+.mobile-cart-toggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--bs-primary);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments for checkout form */
+@media (max-width: 768px) {
+  #checkoutModal .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  #checkoutModal .modal-body {
+    padding: 1rem;
+  }
+
+  #checkoutForm .col-md-6 {
+    margin-bottom: 1rem;
+  }
+
+  #checkoutModal .border-end {
+    border-right: none !important;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #checkoutModal .ps-lg-4 {
+    padding-left: 0 !important;
+  }
+
+  .checkout-card .card-body {
+    padding: 1.25rem;
+  }
+}
+
+/* Make the checkout modal scrollable on mobile */
+@media (max-height: 700px) {
+  #checkoutModal .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+/* Enhanced form section spacing */
+.checkout-card .card-body .row {
+  margin-bottom: 0;
+}
+
+.checkout-card .card-body .mb-3:last-child,
+.checkout-card .card-body .mb-0 {
+  margin-bottom: 0 !important;
+}
+
+/* Better focus states for accessibility */
+.form-control:focus,
+.form-select:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(50, 205, 50, 0.15);
+}
+
+/* Improved modal header steps */
+#checkoutModal .modal-header .flex-fill {
+  position: relative;
+}
+
+#checkoutModal .modal-header .flex-fill .bi {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Loading state for create order button */
+#createOrderBtn:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  cursor: not-allowed;
+}
+
+#createOrderBtn.loading {
+  position: relative;
+  color: transparent;
+}
+
+#createOrderBtn.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Card header icons */
+.checkout-card .card-header .bi {
+  color: var(--bs-primary);
+}
+
+/* Empty cart state in order summary */
+#checkoutSummary .list-group-item .bi-cart-x {
+  color: #6c757d;
+  opacity: 0.5;
+}
+
+/* Smooth transitions for address field toggle */
+#addressField {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Improved button styles in card footer */
+.checkout-card .card-footer .btn-link {
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
+
+.checkout-card .card-footer .btn-link:hover {
+  color: var(--bs-primary);
+}
+
+/*
+=================================
+About Page Styles
+=================================
+*/
+
+.about-hero {
+  position: relative;
+  /* Uses one of your uploaded images */
+  background: url('images/ChickenLomi640-1.jpg') center/cover no-repeat;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  margin-top: -80px; /* Pulls it up under the transparent navbar */
+}
+
+.about-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.about-hero .container {
+  position: relative;
+  z-index: 2;
+  padding-top: 80px; /* Offset for the navbar */
+}
+
+.value-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  height: 100%; /* Makes cards in a row equal height */
+  border-top: 4px solid var(--bs-primary);
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.value-card .bi {
+  font-size: 3.5rem;
+  color: var(--bs-primary);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+/*
+=================================
+Animation Classes (for script.js)
+=================================
+*/
+
+/* Initial state: hidden */
+.fade-in,
+.fade-in-left,
+.fade-in-right {
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in {
+  transform: translateY(30px);
+}
+
+.fade-in-left {
+  transform: translateX(-40px);
+}
+
+.fade-in-right {
+  transform: translateX(40px);
+}
+
+/* Final state: visible */
+.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/*
+=================================
+Contact Page Styles
+=================================
+*/
+
+.contact-info-list {
+  padding-left: 0;
+  line-height: 1.8;
+}
+
+.contact-info-list li {
+  align-items: flex-start;
+}
+
+.contact-info-list .bi {
+  font-size: 1.5rem; /* 24px */
+  color: var(--bs-primary);
+  margin-right: 1.25rem;
+  margin-top: 0.25rem;
+  min-width: 24px; /* Ensure alignment */
+}
+
+/* Style for floating labels to match theme */
+.form-floating > .form-control:focus ~ label {
+  color: var(--bs-primary);
+}
+
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  opacity: 0.65;
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.form-floating > label {
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+  font-size: 0.95rem;
+}
+
+.form-floating > .form-control {
+  padding-top: 1.5rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Style for the map embed */
+.ratio iframe {
+  transition: transform 0.3s ease;
+}
+
+.ratio:hover iframe {
+  transform: scale(1.03);
+}
+
+
