@@ -11,11 +11,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Gallery - Bente Sais Lomihan</title>
+    <title>Gallery</title>
     <style>
         .gallery-hero {
             position: relative;
-            background: url('uploads/products/68dfa41bec1d2_1759487003.jpg') center/cover no-repeat;
+            background: url('uploads/products/ChickenLomi640-1.jpg') center/cover no-repeat;
             color: white;
             padding: 100px 0 60px;
             margin-top: -80px;
@@ -214,70 +214,7 @@
 </head>
 <body>
 
-    <nav class="navbar fixed-top navbar-expand-lg">
-        <div class="container py-3">
-            <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">Quick</span>Crave
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">BENTESAIS</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body d-flex flex-column flex-lg-row align-items-lg-center">
-                    <div class="d-lg-none w-100 mb-3 pb-3 border-bottom">
-                        <?php if (isset($_SESSION['user_id'])): ?>
-                            <div class="dropdown">
-                                <a class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center w-100" href="#" id="offcanvasUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-2"></i> <?php echo htmlspecialchars($_SESSION['full_name']); ?>
-                                </a>
-                                <ul class="dropdown-menu w-100" aria-labelledby="offcanvasUserDropdown">
-                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="actions/logout.php">Logout</a></li>
-                                </ul>
-                            </div>
-                        <?php else: ?>
-                            <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="offcanvas">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                            </button>
-                        <?php endif; ?>
-                    </div>
-
-                    <ul class="navbar-nav justify-content-center flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" href="about.php">About us</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="gallery.php">Gallery</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="index.php">Menu</a></li>
-                    </ul>
-
-                    <div class="ms-auto d-none d-lg-block">
-                        <?php if (isset($_SESSION['user_id'])): ?>
-                            <div class="dropdown">
-                                <a class="btn dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($_SESSION['full_name']); ?>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                                </ul>
-                            </div>
-                        <?php else: ?>
-                            <button class="btn btn-theme rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                Login
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <?php include 'includes/header.php'; ?>
 
     <header class="gallery-hero">
         <div class="container text-center">
@@ -291,7 +228,7 @@
         <div class="gallery-grid" id="galleryGrid">
             <!-- Featured Items Only - 4 Photos -->
             <div class="gallery-item fade-in" data-category="lomi">
-                <img src="uploads/products/68dfa41bec1d2_1759487003.jpg" alt="Special Lomi">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Special Lomi">
                 <div class="gallery-item-overlay">
                     <p class="gallery-item-category">Lomi Specials</p>
                     <h3 class="gallery-item-title">Special Lomi</h3>
@@ -299,7 +236,7 @@
             </div>
 
             <div class="gallery-item fade-in" data-category="meals">
-                <img src="uploads/products/68dfa41bec1d2_1759487003.jpg" alt="Tapsilog">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Tapsilog">
                 <div class="gallery-item-overlay">
                     <p class="gallery-item-category">Rice Meals</p>
                     <h3 class="gallery-item-title">Tapsilog</h3>
@@ -307,7 +244,7 @@
             </div>
 
             <div class="gallery-item fade-in" data-category="snacks">
-                <img src="uploads/products/68dfa41bec1d2_1759487003.jpg" alt="Fresh Lumpia">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Fresh Lumpia">
                 <div class="gallery-item-overlay">
                     <p class="gallery-item-category">Snacks</p>
                     <h3 class="gallery-item-title">Fresh Lumpia</h3>
@@ -315,7 +252,7 @@
             </div>
 
             <div class="gallery-item fade-in" data-category="restaurant">
-                <img src="uploads/products/68dfa41bec1d2_1759487003.jpg" alt="Restaurant">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Restaurant">
                 <div class="gallery-item-overlay">
                     <p class="gallery-item-category">Our Place</p>
                     <h3 class="gallery-item-title">Cozy Dining Area</h3>
@@ -338,16 +275,7 @@
         </div>
     </div>
 
-    <footer class="text-center py-4 mt-5">
-        <div class="container">
-            <p class="mb-2">&copy; 2025 Bente Sais Lomihan. All Rights Reserved.</p>
-            <div>
-                <a href="https://www.facebook.com/ajharafoodhaus" class="me-3"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="me-3"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-twitter"></i></a>
-            </div>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
 
     <?php include 'includes/modals.php'; ?>
     <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script>

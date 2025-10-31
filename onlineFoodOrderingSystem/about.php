@@ -15,11 +15,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>About Us - Bente Sais Lomihan</title>
+    <title>About Us</title>
     <style>
         .about-hero {
             position: relative;
-            background: url('uploads/products/68dfa41bec1d2_1759487003.jpg') center/cover no-repeat;
+            background: url('uploads/products/ChickenLomi640-1.jpg') center/cover no-repeat;
             min-height: 60vh;
             display: flex;
             align-items: center;
@@ -50,82 +50,7 @@
 
 <body>
 
-    <nav class="navbar fixed-top navbar-expand-lg">
-        <div class="container py-3">
-            <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">Quick</span>Crave
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">BENTESAIS</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-
-                <div class="offcanvas-body d-flex flex-column flex-lg-row align-items-lg-center">
-
-                    <div class="d-lg-none w-100 mb-3 pb-3 border-bottom">
-                        <?php if (isset($_SESSION['user_id'])): ?>
-                            <div class="dropdown">
-                                <a class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center w-100" href="#"
-                                id="offcanvasUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-2"></i>
-                                    <?php echo htmlspecialchars($_SESSION['full_name']); ?>
-                                </a>
-                                <ul class="dropdown-menu w-100" aria-labelledby="offcanvasUserDropdown">
-                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                                </ul>
-                            </div>
-                        <?php else: ?>
-                            <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal" data-bs-dismiss="offcanvas">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                            </button>
-                        <?php endif; ?>
-                    </div>
-
-                    <ul class="navbar-nav justify-content-center flex-grow-1">
-                        <li class="nav-item"><a class="nav-link active" href="about.php">About us</a></li>
-                        <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="index.php">Menu</a></li>
-                    </ul>
-
-                    <div class="ms-auto d-none d-lg-block">
-                        <?php if (isset($_SESSION['user_id'])): ?>
-                            <div class="dropdown">
-                                <a class="btn dropdown-toggle d-flex align-items-center" href="#"
-                                id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-1"></i>
-                                    <?php echo htmlspecialchars($_SESSION['full_name']); ?>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                                </ul>
-                            </div>
-                        <?php else: ?>
-                            <button class="btn btn-theme rounded-pill px-3" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal">
-                                Login
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                </div>
-        </div>
-    </nav>
+    <?php include 'includes/header.php'; ?>
 
 
     <header class="about-hero">
@@ -158,7 +83,7 @@
                                 </div>
                                 <div class="col-lg-6 text-center">
                                     <div class="ratio ratio-1x1 rounded-3 overflow-hidden shadow">
-                                        <img src="uploads/products/68dfa41bec1d2_1759487003.jpg" alt="Traditional Cooking" class="img-fluid" style="object-fit: cover;">
+                                        <img src="uploads/products/ChickenLomi640-1.jpg" alt="Traditional Cooking" class="img-fluid" style="object-fit: cover;">
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +164,7 @@
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6">
                     <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-lg fade-in-left">
-                        <img src="uploads/products/68dfa41bec1d2_1759487003.jpg" alt="Restaurant Interior" class="img-fluid" style="object-fit: cover;">
+                        <img src="uploads/products/ChickenLomi640-1.jpg" alt="Restaurant Interior" class="img-fluid" style="object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-6 fade-in-right" style="transition-delay: 0.2s;">
@@ -302,7 +227,7 @@
                         <div class="card border-0 shadow-sm h-100 text-center">
                             <div class="card-body p-4">
                                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden mx-auto mb-3" style="max-width: 120px;">
-                                    <img src="assets/images/chef-placeholder.jpg" alt="Head Chef" class="img-fluid" style="object-fit: cover;">
+                                    <img src="uploads/profile/staff.jpg" alt="Head Chef" class="img-fluid" style="object-fit: cover;">
                                 </div>
                                 <h5 class="fw-bold mb-1">Juan Dela Cruz</h5>
                                 <p class="text-primary mb-3">Head Chef</p>
@@ -314,7 +239,7 @@
                         <div class="card border-0 shadow-sm h-100 text-center">
                             <div class="card-body p-4">
                                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden mx-auto mb-3" style="max-width: 120px;">
-                                    <img src="assets/images/manager-placeholder.jpg" alt="Restaurant Manager" class="img-fluid" style="object-fit: cover;">
+                                    <img src="uploads/profile/staff.jpg" alt="Restaurant Manager" class="img-fluid" style="object-fit: cover;">
                                 </div>
                                 <h5 class="fw-bold mb-1">Maria Santos</h5>
                                 <p class="text-primary mb-3">Restaurant Manager</p>
@@ -326,7 +251,7 @@
                         <div class="card border-0 shadow-sm h-100 text-center">
                             <div class="card-body p-4">
                                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden mx-auto mb-3" style="max-width: 120px;">
-                                    <img src="assets/images/sous-chef-placeholder.jpg" alt="Sous Chef" class="img-fluid" style="object-fit: cover;">
+                                    <img src="uploads/profile/staff.jpg" alt="Sous Chef" class="img-fluid" style="object-fit: cover;">
                                 </div>
                                 <h5 class="fw-bold mb-1">Pedro Reyes</h5>
                                 <p class="text-primary mb-3">Sous Chef</p>
@@ -339,16 +264,7 @@
         </section>
     </main>
 
-    <footer class="text-center py-4 mt-auto">
-        <div class="container">
-            <p class="mb-2">&copy; 2025 Bente Sais Lomihan. All Rights Reserved.</p>
-            <div>
-                <a href="#" class="me-3"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="me-3"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-twitter"></i></a>
-            </div>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
 
     <?php include 'includes/modals.php'; ?> 
     <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script>

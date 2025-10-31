@@ -34,7 +34,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="assets/bootstrapfile/css/bootstrap.min.css"> <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css"> <title>My Orders - Bente Sais Lomihan</title>
+    <link rel="stylesheet" href="assets/css/style.css"> 
+    <title>My Orders</title>
     <style>
     .orders-container {
         max-width: 1200px;
@@ -298,72 +299,8 @@
 </head>
 
 <body>
-    <nav class="navbar fixed-top navbar-expand-lg">
-        <div class="container py-3">
-            <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">Quick</span>Crave
-            </a>
-            
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">BENTESAIS</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-
-                <div class="offcanvas-body d-flex flex-column flex-lg-row align-items-lg-center">
-
-                    <div class="d-lg-none w-100 mb-3 pb-3 border-bottom">
-                        <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center w-100"
-                                href="#" id="offcanvasUserDropdown" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="bi bi-person-circle me-2"></i>
-                                <?php echo htmlspecialchars($user_name); ?>
-                            </a>
-                            <ul class="dropdown-menu w-100" aria-labelledby="offcanvasUserDropdown">
-                                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                <li><a class="dropdown-item active" href="my_orders.php">My Orders</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="actions/logout.php">Logout</a></li> </ul>
-                        </div>
-                    </div>
-
-                    <ul class="navbar-nav justify-content-center flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" href="about.php">About us</a></li>
-                        <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="index.php">Menu</a></li>
-
-                    </ul>
-
-                    <div class="ms-auto d-none d-lg-block">
-                        <div class="dropdown">
-                            <a class="btn dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-1"></i>
-                                <?php echo htmlspecialchars($user_name); ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    
+    <?php include 'includes/header.php'; ?>
 
     <main style="padding-top: 100px; min-height: 100vh; background: #F7F1F4;">
         <div class="container orders-container py-5">
@@ -593,6 +530,8 @@
         </div>
     </main>
 
+    
+
     <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -613,6 +552,7 @@
         </div>
     </div>
 
+    <?php include 'includes/footer.php'; ?>
 
     <?php include 'includes/modals.php'; ?> <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script> 
     
