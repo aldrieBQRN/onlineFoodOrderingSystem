@@ -11,49 +11,51 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Please log in to place an order.']);
+    echo json_encode(['success' => false, 'message' => 'Authentication required.']);
     exit;
 }
 
-// Get raw POST data
-$input = json_decode(file_get_contents('php://input'), true);
-
-if (!$input) {
+// Check for all required data
+if (!isset($_POST['orderData']) || !isset($_FILES['receipt_image'])) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Invalid input data.']);
+    echo json_encode(['success' => false, 'message' => 'Missing order data or receipt image.']);
     exit;
 }
 
-// Validate required fields
-$required_fields = ['contact', 'order_type', 'payment_method', 'order_time', 'items', 'total'];
-foreach ($required_fields as $field) {
-    if (!isset($input[$field])) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => "Missing required field: $field"]);
-        exit;
-    }
+// --- 1. FILE VALIDATION ---
+$file = $_FILES['receipt_image'];
+if ($file['error'] !== UPLOAD_ERR_OK) {
+    echo json_encode(['success' => false, 'message' => 'File upload error. Code: ' . $file['error']]);
+    exit;
 }
 
-// --- THIS IS THE CHANGE ---
-// If payment method is Gcash, this file should not be used.
-// The frontend (JS) should have prevented this.
-if ($input['payment_method'] === 'Gcash') {
+$allowed_mime_types = ['image/jpeg', 'image/png', 'image/jpg'];
+$file_mime_type = mime_content_type($file['tmp_name']);
+if (!in_array($file_mime_type, $allowed_mime_types)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid file type. Only JPG and PNG are allowed.']);
+    exit;
+}
+
+// --- 2. DECODE ORDER DATA ---
+$input = json_decode($_POST['orderData'], true);
+if (json_last_error() !== JSON_ERROR_NONE) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'GCash orders must be submitted with payment.']);
+    echo json_encode(['success' => false, 'message' => 'Invalid order data format.']);
     exit;
 }
+
+$reference_number = isset($_POST['reference_number']) ? trim($_POST['reference_number']) : null;
+$user_id = $_SESSION['user_id'];
 
 try {
     $conn->begin_transaction();
 
-    // Generate unique order number
+    // --- 3. CREATE THE ORDER ---
     $order_number = 'ORD' . date('ymd') . rand(1000, 9999);
-
-    // Insert order
-    $order_sql = "INSERT INTO orders (user_id, order_number, order_type, order_time, payment_method, total_amount)
-                  VALUES (?, ?, ?, ?, ?, ?)";
+    $order_sql = "INSERT INTO orders (user_id, order_number, order_type, order_time, payment_method, total_amount, order_status)
+                  VALUES (?, ?, ?, ?, ?, ?, 'pending')"; // Start as 'pending'
     $order_stmt = $conn->prepare($order_sql);
-    $order_stmt->bind_param("issssd", $_SESSION['user_id'], $order_number, $input['order_type'],
+    $order_stmt->bind_param("issssd", $user_id, $order_number, $input['order_type'],
         $input['order_time'], $input['payment_method'], $input['total']);
     $order_stmt->execute();
     $order_id = $conn->insert_id;
@@ -86,7 +88,6 @@ try {
     $item_sql = "INSERT INTO order_items (order_id, item_name, quantity, unit_price, total_price)
                  VALUES (?, ?, ?, ?, ?)";
     $item_stmt = $conn->prepare($item_sql);
-
     foreach ($input['items'] as $item) {
         $total_price = $item['price'] * $item['quantity'];
         $item_stmt->bind_param("isidd", $order_id, $item['name'], $item['quantity'],
@@ -95,20 +96,43 @@ try {
     }
     $item_stmt->close();
 
-    $conn->commit();
+    // --- 4. UPLOAD THE FILE ---
+    $upload_dir = '../uploads/receipts/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+    $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $new_filename = 'order_' . $order_id . '_' . time() . '.' . $file_extension;
+    $upload_path = $upload_dir . $new_filename;
+    $db_path = 'uploads/receipts/' . $new_filename; // Path to store in DB
 
-    // THIS IS THE UPDATED RESPONSE - We removed the 'payment_required' logic
+    if (!move_uploaded_file($file['tmp_name'], $upload_path)) {
+        throw new Exception('Failed to move uploaded file.');
+    }
+
+    // --- 5. INSERT THE PAYMENT RECORD ---
+    $sql = "INSERT INTO payments (order_id, receipt_image_url, reference_number) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iss", $order_id, $db_path, $reference_number);
+    $stmt->execute();
+    $stmt->close();
+    
+    // --- 6. COMMIT TRANSACTION ---
+    $conn->commit();
+    
     echo json_encode([
-        'success'      => true,
-        'message'      => 'Order placed successfully!',
-        'order_number' => $order_number,
-        'order_id'     => $order_id,
-        'payment_method' => $input['payment_method']
+        'success'      => true, 
+        'message'      => 'Payment uploaded successfully!',
+        'order_number' => $order_number
     ]);
 
 } catch (Exception $e) {
     $conn->rollback();
     http_response_code(500);
+    // Delete the file if it was uploaded but the DB failed
+    if (isset($upload_path) && file_exists($upload_path)) {
+        unlink($upload_path);
+    }
     echo json_encode(['success' => false, 'message' => 'Failed to place order: ' . $e->getMessage()]);
 }
 

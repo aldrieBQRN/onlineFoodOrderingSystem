@@ -67,6 +67,20 @@ try {
     }
     $items_stmt->close();
 
+    // 5. Get Payment Details (if not COD) (NEW BLOCK)
+    $data['payment'] = null;
+    if ($data['order']['payment_method'] != 'COD') {
+        $payment_sql = "SELECT * FROM payments WHERE order_id = ?";
+        $payment_stmt = $conn->prepare($payment_sql);
+        $payment_stmt->bind_param("i", $order_id);
+        $payment_stmt->execute();
+        $payment_result = $payment_stmt->get_result();
+        if ($payment_result->num_rows > 0) {
+            $data['payment'] = $payment_result->fetch_assoc();
+        }
+        $payment_stmt->close();
+    }
+
     echo json_encode($data);
 
 } catch (Exception $e) {

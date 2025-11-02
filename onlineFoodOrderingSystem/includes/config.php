@@ -14,9 +14,9 @@ $pass = "";
 $db   = "online_ordering_system_db";
 
 // // Database configuration in infinityfree hosting
-// $host = "sql101.infinityfree.com"; // Changed from "localhost"
-// $user = "if0_40232593";            // Changed from "root"
-// $pass = "AldrieBQRN"; // IMPORTANT: Change this to your actual password
+// $host = "sql101.infinityfree.com"; 
+// $user = "if0_40232593";           
+// $pass = "AldrieBQRN";
 // $db   = "if0_40232593_online_ordering_system_db"; 
 
 // Create connection

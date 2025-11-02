@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container py-3">
             <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">Quick1</span>Crave
+                <span style="color: #32cd32;">Quick</span>Crave
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -12,7 +12,7 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">BENTESAIS</h5>
+                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">QuickCrave</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
 
@@ -27,33 +27,40 @@
                                     <?php echo htmlspecialchars($_SESSION['full_name']); ?>
                                 </a>
                                 <ul class="dropdown-menu w-100" aria-labelledby="offcanvasUserDropdown">
-                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php">My Orders</a></li>
+                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="actions/logout.php">Logout</a></li> 
+                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li> 
                                 </ul>
                             </div>
                         <?php else: ?>
-                            <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal" data-bs-dismiss="offcanvas">
-                                <i class="bi bi-box-arrow-in-right me-"></i> Login
-                            </button>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-theme rounded-pill w-100 py-2" data-bs-toggle="modal"
+                                        data-bs-target="#loginModal" data-bs-dismiss="offcanvas">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                                </button>
+                                <button class="btn btn-outline-theme rounded-pill w-100 py-2" data-bs-toggle="modal"
+                                        data-bs-target="#signupModal" data-bs-dismiss="offcanvas">
+                                    <i class="bi bi-person-plus me-1"></i> Register
+                                </button>
+                            </div>
                         <?php endif; ?>
                     </div>
 
                     <ul class="navbar-nav justify-content-center flex-grow-1">
+                        <li class="nav-item"><a class="nav-link active" href="index.php">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="about.php">About us</a></li>
                         <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="index.php">Menu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="menu.php">Menu</a></li>
                     </ul>
 
                     <div class="ms-auto d-none d-lg-block">
                         <?php if (isset($_SESSION['user_id'])): ?>
                             <div class="dropdown">
-                                <a class="btn dropdown-toggle d-flex align-items-center" href="#"
+                                <a class="nav-link dropdown-toggle d-flex align-items-center fw-medium" href="#"
                                 id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-1"></i>
+                                    <i class="bi bi-person-circle fs-5 me-2"></i>
                                     <?php echo htmlspecialchars($_SESSION['full_name']); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -64,10 +71,16 @@
                                 </ul>
                             </div>
                         <?php else: ?>
-                            <button class="btn btn-theme rounded-pill px-4" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal">
-                                Login
-                            </button>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-theme rounded-pill px-4" data-bs-toggle="modal"
+                                        data-bs-target="#loginModal">
+                                    Login
+                                </button>
+                                <button class="btn btn-outline-theme rounded-pill px-4" data-bs-toggle="modal"
+                                        data-bs-target="#signupModal">
+                                    Register
+                                </button>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>

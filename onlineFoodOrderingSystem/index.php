@@ -1,6 +1,7 @@
 <?php
-    include 'includes/config.php'; // <-- CORRECT
-    $is_home = true; // Flag to indicate this is the home/menu page
+    include 'includes/config.php';
+    $is_home = true; // Flag to indicate this is the home page
+   
 ?>
 
 <!DOCTYPE html>
@@ -10,121 +11,477 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="assets/bootstrapfile/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="assets/bootstrapfile/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css"> 
-    <title>Our Menu</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Bente Sais Lomihan - Home</title>
+    <style>
+        /* Hero Section */
+        .home-hero {
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('uploads/products/ChickenLomi640-1.jpg') center/cover no-repeat;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            margin-top: -80px;
+            padding-top: 120px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(50, 205, 50, 0.2);
+            color: #32cd32;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            border: 1px solid rgba(50, 205, 50, 0.3);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Featured Categories */
+        .categories-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .category-card:hover .category-image img {
+            transform: scale(1.1);
+        }
+
+        .category-content {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            color: #32cd32;
+            margin-bottom: 15px;
+        }
+
+        /* Special Offers */
+        .offers-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #32cd32 0%, #228b22 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offers-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.05"><polygon points="1000,100 1000,0 0,100"></polygon></svg>');
+            background-size: cover;
+        }
+
+        .offer-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .offer-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+            height: 100%;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 4rem;
+            color: #32cd32;
+            opacity: 0.2;
+            font-family: serif;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .testimonial-rating {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            text-align: center;
+        }
+
+        .cta-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <?php include 'includes/header.php'; // <-- CORRECT ?>
+    <?php include 'includes/header.php'; ?>
 
-    <main class="pt-3">
-        <div class="bg-white text-center py-5">
-            <h1 class="fw-bold">Our Menu</h1>
-            <p class="text-muted">Choose your favorite dish</p>
+    <!-- Hero Section -->
+    <section class="home-hero">
+        <div class="hero-content">
+            <span class="hero-badge">Since 2008</span>
+            <h1 class="hero-title">Authentic Filipino Flavors in Every Bowl</h1>
+            <p class="hero-subtitle">Experience the rich, hearty taste of traditional Lomi and more at Bente Sais Lomihan</p>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-theme btn-lg rounded-pill px-4 py-2">
+                    <i class="bi bi-utensils me-2"></i> Order Now
+                </a>
+                <a href="about.php" class="btn btn-outline-light btn-lg rounded-pill px-4 py-2">
+                    <i class="bi bi-play-circle me-2"></i> Our Story
+                </a>
+            </div>
         </div>
+    </section>
 
-        <section id="menu" class="container pt-5">
-            <div class="row">
-                <div class="col-lg-9">
-                    <?php
-                        // Fetch categories
-                        $category_sql = "SELECT * FROM menu_category ORDER BY category_name";
-                        $categories   = $conn->query($category_sql);
-
-                        while ($cat = $categories->fetch_assoc()) {
-                            echo '<div class="px-3 mt-5">';
-                            echo '<h3 class="fw-semibold mb-4">' . $cat['category_name'] . '</h3>';
-                            echo '<div class="row g-4">';
-
-                            // Fetch items per category
-                            $item_sql = "SELECT * FROM menu_item WHERE category_id = " . $cat['category_id'] . " ORDER BY item_name";
-                            $items    = $conn->query($item_sql);
-
-                            while ($item = $items->fetch_assoc()) {
-                                // NOTE: This path comes from your database.
-                                // Make sure $item['image_url'] is 'uploads/products/your-image.jpg'
-                                echo '
-                            <div class="col-md-4">
-                            <div class="card">
-                                <img src="' . $item['image_url'] . '" class="card-img-top" alt="' . $item['item_name'] . '">
-                                <div class="card-body text-center">
-                                <h5 class="card-title fw-bold">' . $item['item_name'] . '</h5>';
-
-                                if (! empty($item['badge'])) {
-                                    echo '<span class="badge badge-theme mb-2">' . $item['badge'] . '</span>';
-                                }
-
-                                echo '
-                                <p class="card-text fs-5 fw-semibold">₱' . number_format($item['price'], 2) . '</p>
-                                <button class="btn btn-theme rounded-pill w-100 py-2 add-to-cart-btn"
-                                        type="button"
-                                        data-name="' . $item['item_name'] . '"
-                                        data-price="' . $item['price'] . '">
-                                    <i class="bi bi-plus-circle"></i> Add to Cart
-                                </button>
-                                </div>
-                            </div>
-                            </div>
-                            ';
-                            }
-
-                            echo '</div></div>'; // close row and category section
-                        }
-                    ?>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="cart-sidebar">
-                        <div class="cart-body" id="cartBody">
-                            <div class="mb-3">
-                                <strong>Your Order</strong>
-                            </div>
-                            <div class="empty-cart" id="emptyCart">
-                                <i class="bi bi-cart-x"></i>
-                                <p class="mb-0">Your cart is empty</p>
-                                <small class="text-muted">Add some delicious items!</small>
-                            </div>
-                            <div id="cartItems"></div>
+    <!-- Featured Categories -->
+    <section class="categories-section" id="menu">
+        <div class="container">
+            <div class="text-center mb-5 fade-in">
+                <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Our Specialties</span>
+                <h2 class="fw-bold display-5 mb-3">Featured Categories</h2>
+                <p class="lead text-muted">Discover our most popular dishes</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4 fade-in">
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="uploads/products/ChickenLomi640-1.jpg" alt="Lomi Specials">
                         </div>
-
-                        <div class="cart-footer">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="fw-bold">Total:</span>
-                                <span class="fw-bold fs-5" id="cartTotal">₱0.00</span>
-                            </div>
-                            <button class="btn btn-theme rounded-pill w-100 py-2" id="checkoutBtn"
-                                data-bs-toggle="modal" data-bs-target="#checkoutModal">
-                                <i class="bi bi-credit-card"></i> Checkout
-                            </button>
+                        <div class="category-content">
+                            <i class="bi bi-egg-fried category-icon"></i>
+                            <h4 class="fw-bold mb-3">Lomi Specials</h4>
+                            <p class="text-muted">Our signature Lomi bowls, rich in flavor and made with love using traditional recipes.</p>
+                            <a href="index.php?category=lomi" class="btn btn-outline-primary rounded-pill mt-2">View All</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="uploads/products/ChickenLomi640-1.jpg" alt="Rice Meals">
+                        </div>
+                        <div class="category-content">
+                            <i class="bi bi-egg category-icon"></i>
+                            <h4 class="fw-bold mb-3">Rice Meals</h4>
+                            <p class="text-muted">Hearty Filipino rice dishes perfect for any time of day, from breakfast to dinner.</p>
+                            <a href="index.php?category=rice" class="btn btn-outline-primary rounded-pill mt-2">View All</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="uploads/products/ChickenLomi640-1.jpg" alt="Appetizers">
+                        </div>
+                        <div class="category-content">
+                            <i class="bi bi-cup-straw category-icon"></i>
+                            <h4 class="fw-bold mb-3">Appetizers & Snacks</h4>
+                            <p class="text-muted">Perfect starters and light bites to complement your main course.</p>
+                            <a href="index.php?category=snacks" class="btn btn-outline-primary rounded-pill mt-2">View All</a>
                         </div>
                     </div>
                 </div>
             </div>
-    </main>
+            
+            <div class="text-center mt-5">
+                <a href="index.php" class="btn btn-theme rounded-pill px-4 py-2">
+                    <i class="bi bi-menu-button-wide me-2"></i> View Full Menu
+                </a>
+            </div>
+        </div>
+    </section>
 
-    <div class="cart-btn-container d-flex align-items-center shadow-lg">
-        <button class="btn d-flex align-items-center px-3 py-2 flex-grow-1 justify-content-between"
-            data-bs-toggle="modal" data-bs-target="#cartModal">
-            <span><i class="bi bi-cart fs-5 me-2"></i> View Cart</span>
-            <span class="fw-bold" id="floatingCartTotal">₱0.00</span>
-        </button>
-        <button class="btn btn-theme rounded-pill px-4 py-2 ms-2" data-bs-toggle="modal"
-            data-bs-target="#checkoutModal">
-            Checkout
-        </button>
-    </div>
+    <!-- Special Offers -->
+    <section class="offers-section">
+        <div class="container">
+            <div class="text-center mb-5 fade-in">
+                <span class="text-uppercase fw-bold badge bg-white bg-opacity-20 text-white px-3 py-2 mb-3 d-inline-block">Limited Time</span>
+                <h2 class="fw-bold display-5 mb-3 text-white">Special Offers</h2>
+                <p class="lead text-white opacity-75">Don't miss out on these exclusive deals</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4 fade-in">
+                    <div class="offer-card">
+                        <i class="bi bi-percent offer-icon"></i>
+                        <h4 class="fw-bold mb-3">Family Bundle</h4>
+                        <p class="mb-3 opacity-90">Get 20% off when you order our special family bundle. Perfect for 4-5 people!</p>
+                        <span class="badge bg-white text-success px-3 py-2">Save ₱200</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                    <div class="offer-card">
+                        <i class="bi bi-truck offer-icon"></i>
+                        <h4 class="fw-bold mb-3">Free Delivery</h4>
+                        <p class="mb-3 opacity-90">Enjoy free delivery on orders over ₱500 within Nasugbu area. Limited time only!</p>
+                        <span class="badge bg-white text-success px-3 py-2">No Minimum</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                    <div class="offer-card">
+                        <i class="bi bi-gift offer-icon"></i>
+                        <h4 class="fw-bold mb-3">Loyalty Rewards</h4>
+                        <p class="mb-3 opacity-90">Earn points with every purchase and redeem for free items on your next visit.</p>
+                        <span class="badge bg-white text-success px-3 py-2">Join Now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="text-center mb-5 fade-in">
+                <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Testimonials</span>
+                <h2 class="fw-bold display-5 mb-3">What Our Customers Say</h2>
+                <p class="lead text-muted">Real feedback from our valued customers</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4 fade-in">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="uploads/profile/staff.jpg" alt="Customer" class="testimonial-avatar">
+                            <div>
+                                <h5 class="fw-bold mb-0">Maria Santos</h5>
+                                <p class="text-muted mb-0">Regular Customer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-muted">"The Special Lomi here is the best I've ever tasted! The broth is rich and flavorful, and the ingredients are always fresh. My family and I come here every weekend."</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="uploads/profile/staff.jpg" alt="Customer" class="testimonial-avatar">
+                            <div>
+                                <h5 class="fw-bold mb-0">Juan Dela Cruz</h5>
+                                <p class="text-muted mb-0">First-time Visitor</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                        <p class="text-muted">"I was recommended by a friend and I'm so glad I tried this place. The Tapsilog was amazing and the service was fast and friendly. Will definitely be back!"</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="uploads/profile/staff.jpg" alt="Customer" class="testimonial-avatar">
+                            <div>
+                                <h5 class="fw-bold mb-0">Ana Reyes</h5>
+                                <p class="text-muted mb-0">Food Blogger</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-muted">"As a food blogger, I've tried many Lomi places, but Bente Sais stands out. The authentic taste and cozy atmosphere make it my top recommendation in Nasugbu."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <?php include 'includes/footer.php'; // <-- CORRECT ?>
-    <?php include 'includes/modals.php'; // <-- CORRECT ?>
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card fade-in">
+                <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Ready to Order?</span>
+                <h2 class="fw-bold display-5 mb-3">Experience the Taste of Tradition</h2>
+                <p class="lead text-muted mb-4">Join hundreds of satisfied customers who have made Bente Sais their go-to spot for authentic Filipino comfort food.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="index.php" class="btn btn-theme rounded-pill btn-lg px-4 py-2">
+                        <i class="bi bi-utensils me-2"></i> Order Now
+                    </a>
+                    <a href="contact.php" class="btn btn-outline-primary rounded-pill btn-lg px-4 py-2">
+                        <i class="bi bi-telephone me-2"></i> Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script> 
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="assets/js/script.js"></script> 
+    <?php include 'includes/footer.php'; ?>
+
+    <?php include 'includes/modals.php'; ?>
+    <script src="assets/bootstrapfile/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/script.js"></script>
+    
+    <script>
+        // Scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 
 </html>

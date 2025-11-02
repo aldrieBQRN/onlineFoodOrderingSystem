@@ -39,6 +39,69 @@ body {
   transform: translateY(-2px);
 }
 
+/*
+=================================
+Header Enhancements (New)
+=================================
+*/
+
+/* Style for the new outline "Register" button */
+.btn-outline-theme {
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-theme:hover {
+  color: white;
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  transform: translateY(-2px);
+}
+
+/* Style for the enhanced user dropdown link on desktop */
+.navbar .nav-link.dropdown-toggle {
+  color: #333; /* Darker text for visibility */
+  transition: color 0.3s ease;
+  padding-right: 0.5rem; /* Ensure space for dropdown arrow */
+}
+
+.navbar .nav-link.dropdown-toggle:hover,
+.navbar .nav-link.dropdown-toggle:focus {
+  color: var(--bs-primary); /* Highlight on hover */
+}
+
+/* Style for the dropdown menu items */
+.dropdown-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-item:active {
+  background-color: var(--bs-primary); /* Active/click state */
+  color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa; /* Light hover background */
+  color: var(--bs-primary); /* Theme color on hover */
+}
+
+.dropdown-item .bi {
+  color: #6c757d; /* Muted icon color */
+  transition: color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover .bi {
+  color: var(--bs-primary); /* Icon color on hover */
+}
+
+/*
+=================================
+General Content Styles
+=================================
+*/
+
 .card {
   border-radius: 12px;
   overflow: hidden;
@@ -86,7 +149,12 @@ footer a:hover {
   color: var(--bs-primary);
 }
 
-/* Cart Sidebar Styles */
+/*
+=================================
+Cart Sidebar Styles
+=================================
+*/
+
 .cart-sidebar {
   position: sticky;
   top: 120px; /* sticks right below the navbar */
@@ -219,7 +287,12 @@ footer a:hover {
   background: var(--bs-primary-hover);
 }
 
-/* Checkout Card Styles */
+/*
+=================================
+Checkout Card Styles
+=================================
+*/
+
 .checkout-card {
   border: 1px solid #e9ecef;
   border-radius: 12px;
@@ -303,7 +376,12 @@ footer a:hover {
   border-bottom: none;
 }
 
-/* Responsive adjustments */
+/*
+=================================
+Responsive Adjustments
+=================================
+*/
+
 @media (max-width: 991px) {
   body {
     padding-bottom: 100px; /* Add space for sticky cart bar */
@@ -395,6 +473,12 @@ footer a:hover {
     overflow-y: auto;
   }
 }
+
+/*
+=================================
+Form & Modal Polish
+=================================
+*/
 
 /* Enhanced form section spacing */
 .checkout-card .card-body .row {
@@ -625,5 +709,3 @@ Contact Page Styles
 .ratio:hover iframe {
   transform: scale(1.03);
 }
-
-

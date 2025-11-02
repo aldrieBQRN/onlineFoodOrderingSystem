@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   let cart = [];
+  let checkoutOrderData = null; // <-- This variable stores the form data
 
   // DOM elements
   const cartItems = document.getElementById("cartItems");
@@ -15,40 +16,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkoutSummary = document.getElementById("checkoutSummary");
   const checkoutTotal = document.getElementById("checkoutTotal");
 
-  // UPDATED Checkout Modal elements
   const finalOrderType = document.getElementById("finalOrderType");
   const addressField = document.getElementById("addressField");
-  const contactDetails = document.getElementById("contactDetails");
   const createOrderBtn = document.getElementById("createOrderBtn");
 
   // Function to bind cart events
   function bindCartEvents() {
     document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
-      // Remove existing event listeners to prevent duplicates
       button.replaceWith(button.cloneNode(true));
     });
 
-    // Re-bind events to the new buttons
     document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
       button.addEventListener("click", (e) => {
         const name = e.target.dataset.name;
         const price = parseFloat(e.target.dataset.price);
-
         const existingItem = cart.find((item) => item.name === name);
-
         if (existingItem) {
           existingItem.quantity += 1;
         } else {
           cart.push({ name, price, quantity: 1 });
         }
-
         updateCartDisplay();
-
-        // Add visual feedback
         const originalHTML = e.target.innerHTML;
         e.target.innerHTML = '<i class="bi bi-check"></i> Added!';
         e.target.disabled = true;
-
         setTimeout(() => {
           e.target.innerHTML = originalHTML;
           e.target.disabled = false;
@@ -62,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (finalOrderType && addressField) {
       addressField.style.display =
         finalOrderType.value === "Pickup" ? "none" : "block";
-
-      // Set required attribute on address fields based on selection
       const addressFields = addressField.querySelectorAll(
         "input[name], textarea[name]"
       );
@@ -75,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (finalOrderType) {
     finalOrderType.addEventListener("change", toggleAddressField);
-    // Initial call to set correct display on load
     toggleAddressField();
   }
 
@@ -86,11 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const toastMessageBody = document.getElementById("toastMessageBody");
 
     let orderSuccessToast;
-    if (
-      orderSuccessToastEl &&
-      typeof bootstrap !== "undefined" &&
-      bootstrap.Toast
-    ) {
+    if (orderSuccessToastEl && typeof bootstrap !== "undefined") {
       orderSuccessToast = new bootstrap.Toast(orderSuccessToastEl);
     }
 
@@ -104,6 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const formData = new FormData(checkoutForm);
+        
+        // --- THIS IS THE KEY PART ---
+        // We build the orderData object HERE
         const orderData = {
           contact: {
             firstName: formData.get("first_name"),
@@ -124,150 +111,218 @@ document.addEventListener("DOMContentLoaded", () => {
           payment_method: formData.get("payment_method"),
           order_time: formData.get("order_time"),
           items: cart,
-          total: cart.reduce(
-            (sum, item) => sum + item.price * item.quantity,
-            0
-          ),
+          // !! THIS IS THE LINE YOUR OLD FILE IS MISSING !!
+          total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
         };
+        // --- END OF KEY PART ---
 
-        // Send order data to server
-        fetch("actions/create_order.php", { // <-- This path was already correct
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              if (orderSuccessToast && toastMessageBody) {
-                toastMessageBody.textContent = `Order placed successfully! Your order number is: ${data.order_number}`;
-                orderSuccessToast.show();
-              } else {
-                alert(
-                  `Order placed successfully! Your order number is: ${data.order_number}`
-                );
-              }
 
-              // Reset cart and close modal
-              cart = [];
-              updateCartDisplay();
-              const checkoutModal = bootstrap.Modal.getInstance(
-                document.getElementById("checkoutModal")
-              );
-              if (checkoutModal) checkoutModal.hide();
-            } else {
-              alert("Failed to place order: " + data.message);
+        // --- NEW LOGIC ---
+        if (orderData.payment_method === 'Gcash') {
+            // 1. Don't create the order. Just store the data.
+            checkoutOrderData = orderData;
+            
+            // 2. Hide checkout modal
+            const checkoutModal = bootstrap.Modal.getInstance(document.getElementById("checkoutModal"));
+            if (checkoutModal) checkoutModal.hide();
+
+            // 3. Show payment modal
+            const paymentModalEl = document.getElementById('paymentModal');
+            if (paymentModalEl) {
+                const paymentModal = new bootstrap.Modal(paymentModalEl);
+                
+                // Fetch GCash QR code and details
+                fetch('actions/get_payment_details.php?method=Gcash')
+                    .then(res => res.json())
+                    .then(details => {
+                        if (details.success && details.data) {
+                            document.getElementById('gcashQrCode').src = details.data.qr_code_url;
+                            document.getElementById('gcashAccountName').textContent = details.data.account_name;
+                            document.getElementById('gcashAccountNumber').textContent = details.data.account_number;
+                            document.getElementById('gcashInstructions').textContent = details.data.instructions;
+                        } else {
+                            document.getElementById('paymentModalBody').innerHTML = `<p class="text-danger">Error: Could not load payment details. Please contact support.</p>`;
+                        }
+                    });
+                
+                paymentModal.show();
             }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert(
-              "An error occurred while placing your order. Please try again."
-            );
-          });
+        
+        } else {
+            // --- ORIGINAL LOGIC for COD/Other ---
+            // Send order data to server to create the order
+            fetch("actions/create_order.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(orderData), // Send the complete orderData
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  // Show success toast
+                  if (orderSuccessToast && toastMessageBody) {
+                    toastMessageBody.textContent = `Order placed successfully! Your order number is: ${data.order_number}`;
+                    orderSuccessToast.show();
+                  } else {
+                    alert(`Order placed successfully! Your order number is: ${data.order_number}`);
+                  }
+                  
+                  // Reset cart and close checkout modal
+                  cart = [];
+                  updateCartDisplay();
+                  const checkoutModal = bootstrap.Modal.getInstance(document.getElementById("checkoutModal"));
+                  if (checkoutModal) checkoutModal.hide();
+
+                } else {
+                  alert("Failed to place order: " + data.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while placing your order. Please try again.");
+              });
+        }
       });
     }
   }
 
+  // MODIFIED FUNCTION to handle payment receipt upload
+  function setupPaymentUploadForm() {
+    const paymentForm = document.getElementById('paymentUploadForm');
+    if (!paymentForm) return;
+
+    paymentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (!checkoutOrderData) {
+            alert("Error: Order data is missing. Please try checking out again.");
+            return;
+        }
+
+        const submitBtn = document.getElementById('uploadPaymentBtn');
+        const messageDiv = document.getElementById('paymentUploadMessage');
+        const originalBtnHtml = submitBtn.innerHTML;
+
+        // --- NEW: Prepare FormData for combined upload ---
+        const formData = new FormData();
+        
+        // 1. Add the order data (as a JSON string)
+        formData.append('orderData', JSON.stringify(checkoutOrderData));
+        
+        // 2. Add the reference number
+        formData.append('reference_number', document.getElementById('reference_number').value);
+        
+        // 3. Add the receipt image file
+        const receiptImageFile = document.getElementById('receipt_image').files[0];
+        if (!receiptImageFile) {
+            messageDiv.textContent = 'Please select a receipt image to upload.';
+            messageDiv.classList.remove('d-none');
+            messageDiv.classList.add('alert-danger');
+            return;
+        }
+        formData.append('receipt_image', receiptImageFile);
+
+
+        // Disable button and show spinner
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading...';
+        messageDiv.classList.add('d-none');
+
+        // --- Send to the NEW PHP file ---
+        fetch('actions/create_order_with_payment.php', {
+            method: 'POST',
+            body: formData
+            // Note: Don't set Content-Type header when using FormData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close the payment modal
+                const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                if (paymentModal) paymentModal.hide();
+
+                // Show the final success toast
+                const orderSuccessToastEl = document.getElementById("orderSuccessToast");
+                const toastMessageBody = document.getElementById("toastMessageBody");
+                if (orderSuccessToastEl && toastMessageBody) {
+                     const orderSuccessToast = new bootstrap.Toast(orderSuccessToastEl);
+                     toastMessageBody.textContent = `Order placed successfully! Your order number is: ${data.order_number}`;
+                     orderSuccessToast.show();
+                } else {
+                    alert(`Order placed successfully! Your order number is: ${data.order_number}`);
+                }
+                
+                // Reset everything
+                paymentForm.reset();
+                checkoutOrderData = null;
+                cart = [];
+                updateCartDisplay();
+
+            } else {
+                // Show error message
+                messageDiv.textContent = data.message;
+                messageDiv.classList.remove('d-none', 'alert-success');
+                messageDiv.classList.add('alert-danger');
+            }
+        })
+        .catch(error => {
+            console.error('Payment Upload Error:', error);
+            messageDiv.textContent = 'An error occurred. Please try again.';
+            messageDiv.classList.remove('d-none', 'alert-success');
+            messageDiv.classList.add('alert-danger');
+        })
+        .finally(() => {
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+        });
+    });
+  }
+
+
   function updateCartDisplay() {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    // Update counters and totals
-    if (cartTotal) {
-      cartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
-    }
-    if (mobileCartTotal) {
-      mobileCartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
-    }
-    if (floatingCartTotal) {
-      floatingCartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
-    }
-    if (checkoutTotal) {
-      checkoutTotal.textContent = `₱${totalPrice.toFixed(2)}`;
-    }
+    if (cartTotal) cartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
+    if (mobileCartTotal) mobileCartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
+    if (floatingCartTotal) floatingCartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
+    if (checkoutTotal) checkoutTotal.textContent = `₱${totalPrice.toFixed(2)}`;
 
-    // Clear and repopulate cart displays
     if (cartItems) cartItems.innerHTML = "";
     if (mobileCartItems) mobileCartItems.innerHTML = "";
     if (checkoutSummary) checkoutSummary.innerHTML = "";
 
     if (cart.length === 0) {
       if (emptyCart) emptyCart.style.display = "block";
-
-      if (mobileCartItems) {
-        mobileCartItems.innerHTML = `
-                    <div class="empty-cart text-center py-4">
-                        <i class="bi bi-cart-x"></i>
-                        <p class="mb-0">Your cart is empty</p>
-                        <small class="text-muted">Add some delicious items!</small>
-                    </div>
-                `;
-      }
-      if (checkoutSummary) {
-        checkoutSummary.innerHTML =
-          '<li class="list-group-item text-center text-muted">Your cart is empty.</li>';
-      }
-      // Disable checkout button if cart is empty
+      if (mobileCartItems) mobileCartItems.innerHTML = `<div class="empty-cart text-center py-4"><i class="bi bi-cart-x"></i><p class="mb-0">Your cart is empty</p><small class="text-muted">Add some delicious items!</small></div>`;
+      if (checkoutSummary) checkoutSummary.innerHTML = '<li class="list-group-item text-center text-muted">Your cart is empty.</li>';
       if (createOrderBtn) {
         createOrderBtn.disabled = true;
         createOrderBtn.textContent = "Cart is Empty";
       }
     } else {
       if (emptyCart) emptyCart.style.display = "none";
-
       cart.forEach((item, index) => {
         const cartItemHTML = `
-                    <div class="cart-item">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">₱${item.price.toFixed(
-                          2
-                        )} each</div>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <div class="quantity-controls">
-                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <span class="fw-semibold">${
-                                  item.quantity
-                                }</span>
-                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
-                            <div class="fw-bold">₱${(
-                              item.price * item.quantity
-                            ).toFixed(2)}</div>
-                        </div>
+            <div class="cart-item">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">₱${item.price.toFixed(2)} each</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="updateQuantity(${index}, -1)"><i class="bi bi-dash"></i></button>
+                        <span class="fw-semibold">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${index}, 1)"><i class="bi bi-plus"></i></button>
                     </div>
-                `;
-
+                    <div class="fw-bold">₱${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+            </div>`;
         if (cartItems) cartItems.innerHTML += cartItemHTML;
         if (mobileCartItems) mobileCartItems.innerHTML += cartItemHTML;
-
-        // Add item to checkout summary
-        if (checkoutSummary) {
-          checkoutSummary.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>${item.quantity}x ${item.name}</span>
-                            <span>₱${(item.price * item.quantity).toFixed(
-                              2
-                            )}</span>
-                        </li>
-                    `;
-        }
+        if (checkoutSummary) checkoutSummary.innerHTML += `<li class="list-group-item d-flex justify-content-between"><span>${item.quantity}x ${item.name}</span><span>₱${(item.price * item.quantity).toFixed(2)}</span></li>`;
       });
-
-      // Re-enable checkout button if cart has items
       if (createOrderBtn) {
         createOrderBtn.disabled = false;
-        createOrderBtn.innerHTML =
-          '<i class="bi bi-bag-check"></i> Create Order';
+        createOrderBtn.innerHTML = '<i class="bi bi-bag-check"></i> Create Order';
       }
     }
   }
@@ -276,16 +331,14 @@ document.addEventListener("DOMContentLoaded", () => {
   window.updateQuantity = function (index, change) {
     if (cart[index]) {
       cart[index].quantity += change;
-
       if (cart[index].quantity <= 0) {
         cart.splice(index, 1);
       }
-
       updateCartDisplay();
     }
   };
 
-  // Authentication Logic (unchanged from original)
+  // --- Authentication Logic (Unchanged) ---
   function handleAuthResponse(data, messageDiv, form, successCallback) {
     messageDiv.classList.remove("d-none", "alert-success", "alert-danger");
     if (data.success) {
@@ -305,7 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Handle Login Form Submission
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", function (e) {
@@ -313,43 +365,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const form = e.target;
       const messageDiv = document.getElementById("loginMessage");
       const formData = new FormData(form);
-
-      fetch("actions/login.php", { // <-- UPDATED
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          if (!response.ok) {
-            // Try to parse error message from server
-            return response.json().then(errData => {
-              throw new Error(errData.message || "Network response was not ok");
-            });
-          }
-          return response.json();
-        })
+      fetch("actions/login.php", { method: "POST", body: formData })
+        .then((response) => response.json())
         .then((data) => {
           handleAuthResponse(data, messageDiv, form, () => {
-            const loginModal = bootstrap.Modal.getInstance(
-              document.getElementById("loginModal")
-            );
+            const loginModal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
             if (loginModal) loginModal.hide();
-
-            // REDIRECT ADMIN TO DASHBOARD
             if (data.role === "admin") {
-              window.location.href = "admin/dashboard.php"; // <-- UPDATED
+              window.location.href = "admin/dashboard.php";
             } else {
               updateNavbar(true, data.full_name);
             }
           });
         })
-        .catch((error) => {
-          console.error("Login Error:", error);
-          if (messageDiv) {
-            messageDiv.classList.remove("d-none", "alert-success");
-            messageDiv.classList.add("alert-danger");
-            messageDiv.textContent = error.message || "A network error occurred during login.";
-          }
-        });
+        .catch((error) => console.error("Login Error:", error));
     });
   }
 
@@ -360,42 +389,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const form = e.target;
       const messageDiv = document.getElementById("signupMessage");
       const formData = new FormData(form);
-
-      fetch("actions/signup.php", { // <-- UPDATED
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          if (!response.ok) {
-            // Try to parse error message from server
-            return response.json().then(errData => {
-              throw new Error(errData.message || "Network response was not ok");
-            });
-          }
-          return response.json();
-        })
+      fetch("actions/signup.php", { method: "POST", body: formData })
+        .then((response) => response.json())
         .then((data) => {
           handleAuthResponse(data, messageDiv, form, () => {
-            const signupModal = bootstrap.Modal.getInstance(
-              document.getElementById("signupModal")
-            );
+            const signupModal = bootstrap.Modal.getInstance(document.getElementById("signupModal"));
             if (signupModal) signupModal.hide();
             setTimeout(() => {
-              const loginModal = new bootstrap.Modal(
-                document.getElementById("loginModal")
-              );
+              const loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
               loginModal.show();
             }, 500);
           });
         })
-        .catch((error) => {
-          console.error("Signup Error:", error);
-          if (messageDiv) {
-            messageDiv.classList.remove("d-none", "alert-success");
-            messageDiv.classList.add("alert-danger");
-            messageDiv.textContent = error.message || "A network error occurred during sign up.";
-          }
-        });
+        .catch((error) => console.error("Signup Error:", error));
     });
   }
 
@@ -405,46 +411,25 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartDisplay();
   // Setup checkout form
   setupCheckoutForm();
+  // SETUP THE NEW PAYMENT FORM
+  setupPaymentUploadForm(); 
 
-  // ===============================================
-  // DYNAMIC SCROLL ANIMATION (Intersection Observer)
-  // ===============================================
-  const animatedElements = document.querySelectorAll(
-    ".fade-in, .fade-in-left, .fade-in-right"
-  );
-
-  // Check if IntersectionObserver is supported
+  // --- Scroll Animation (Unchanged) ---
+  const animatedElements = document.querySelectorAll(".fade-in, .fade-in-left, .fade-in-right");
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
-          // When the element is in view
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-            // Stop observing it so the animation only happens once
             observer.unobserve(entry.target);
           }
         });
       },
-      {
-        threshold: 0.1, // Trigger when 10% of the element is visible
-      }
+      { threshold: 0.1 }
     );
-
-    // Observe each animated element
-    animatedElements.forEach((el) => {
-      observer.observe(el);
-    });
+    animatedElements.forEach((el) => observer.observe(el));
   } else {
-    // Fallback for very old browsers that don't support IntersectionObserver
-    // Just make them all visible immediately
-    animatedElements.forEach((el) => {
-      el.classList.add("is-visible");
-    });
+    animatedElements.forEach((el) => el.classList.add("is-visible"));
   }
-  // ===============================================
-  // END OF SCROLL ANIMATION
-  // ===============================================
-
- 
 });

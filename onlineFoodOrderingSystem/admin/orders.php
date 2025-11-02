@@ -17,31 +17,85 @@
     $total_orders = 0;
     $total_pages = 0;
 
-    // Handle order status updates
+    // Handle order status updates (MODIFIED BLOCK)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
         $order_id   = sanitize_input($_POST['order_id'], $conn);
         $new_status = sanitize_input($_POST['order_status'], $conn);
+        $admin_id   = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : null; // Get admin ID from session
 
-        $sql  = "UPDATE orders SET order_status = ? WHERE order_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $new_status, $order_id);
+        $conn->begin_transaction();
 
-        if ($stmt->execute()) {
-            $message = "Order status updated successfully!";
-        } else {
-            $error = "Error updating order status: " . $stmt->error;
+        try {
+            // 1. Update Order Status
+            $sql  = "UPDATE orders SET order_status = ? WHERE order_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $new_status, $order_id);
+            $order_update_success = $stmt->execute();
+            $stmt->close();
+
+            if (! $order_update_success) {
+                throw new Exception("Error updating order status: " . $conn->error);
+            }
+
+            // 2. If status is 'confirmed', check payment method and update payment
+            if ($new_status === 'confirmed') {
+                // Get payment method from orders table
+                $pm_sql = "SELECT payment_method FROM orders WHERE order_id = ?";
+                $pm_stmt = $conn->prepare($pm_sql);
+                $pm_stmt->bind_param("i", $order_id);
+                $pm_stmt->execute();
+                $pm_result = $pm_stmt->get_result();
+                $pm_row = $pm_result->fetch_assoc();
+                $pm_stmt->close();
+
+                if ($pm_row && $pm_row['payment_method'] !== 'COD') {
+                    // It's a Gcash/Card payment, so update the 'payments' table
+                    $pay_sql = "UPDATE payments SET status = 'verified', verified_by = ?, verified_at = NOW() 
+                                WHERE order_id = ? AND status != 'verified'";
+                    $pay_stmt = $conn->prepare($pay_sql);
+                    $pay_stmt->bind_param("ii", $admin_id, $order_id);
+                    
+                    if (! $pay_stmt->execute()) {
+                         // This could fail if there's no matching payment record, but we'll let the order update stand
+                         // You could add more robust error handling here if a payment record is mandatory
+                    }
+                    
+                    if ($pay_stmt->affected_rows > 0) {
+                         $message = "Order confirmed and payment marked as verified!";
+                    } else {
+                         // Payment was already verified or no payment record exists
+                         $message = "Order confirmed. Payment status unchanged.";
+                    }
+                    $pay_stmt->close();
+
+                } else {
+                    // It's COD or no payment method found, just update order status
+                    $message = "Order status updated successfully!";
+                }
+            } else {
+                $message = "Order status updated successfully!";
+            }
+
+            // If we are here, everything is good
+            $conn->commit();
+
+        } catch (Exception $e) {
+            $conn->rollback();
+            $error = $e->getMessage();
         }
-        $stmt->close();
     }
+
 
     // Build query based on filters
     $sql = "SELECT o.*,
                    CONCAT(oc.first_name, ' ', oc.last_name) as customer_name,
                    oc.phone_number, oc.email,
-                   COUNT(oi.order_item_id) as item_count
+                   COUNT(oi.order_item_id) as item_count,
+                   p.status as payment_status
             FROM orders o
             LEFT JOIN order_contacts oc ON o.order_id = oc.order_id
             LEFT JOIN order_items oi ON o.order_id = oi.order_id
+            LEFT JOIN payments p ON o.order_id = p.order_id
             WHERE 1=1";
 
     $params = [];
@@ -66,6 +120,7 @@
     $count_sql = "SELECT COUNT(DISTINCT o.order_id) as total FROM orders o 
                   LEFT JOIN order_contacts oc ON o.order_id = oc.order_id 
                   LEFT JOIN order_items oi ON o.order_id = oi.order_id 
+                  LEFT JOIN payments p ON o.order_id = p.order_id
                   WHERE 1=1";
     
     if ($status_filter !== 'all') {
@@ -124,6 +179,8 @@
     // Get admin name for display
     $admin_name    = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin';
     $admin_initial = strtoupper(substr($admin_name, 0, 1));
+    $pageTitle = "Order Management";
+    $currentPage = "orders";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -160,6 +217,7 @@
             background-color: #f8fafc;
             color: #334155;
             line-height: 1.6;
+        
         }
 
         .admin-container {
@@ -469,6 +527,20 @@
         .status-ready { background: #d4edda; color: #155724; }
         .status-completed { background: #d1e7dd; color: #0f5132; }
         .status-cancelled { background: #f8d7da; color: #721c24; }
+        
+        /* Payment Status Badges (NEW) */
+        .payment-status {
+            padding: 0.4em 0.7em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .payment-verified { background: #d4edda; color: #155724; }
+        .payment-pending { background: #fff3cd; color: #856404; }
+        .payment-declined { background: #f8d7da; color: #721c24; }
+        .payment-none { background: #e9ecef; color: #495057; }
 
         /* Order Type Badges */
         .order-type-badge {
@@ -483,6 +555,8 @@
         .type-dinein { background: #d1e7ff; color: #084298; }
         .type-takeout { background: #d1e7dd; color: #0f5132; }
         .type-delivery { background: #e7d1ff; color: #5a2d9e; }
+        .type-pickup { background: #d1e7dd; color: #0f5132; } /* Added for pickup */
+
 
         /* Action Buttons */
         .action-buttons {
@@ -699,92 +773,14 @@
 </head>
 <body>
     <div class="admin-container">
-        <!-- Mobile Overlay -->
         <div class="mobile-overlay" id="mobileOverlay"></div>
 
-        <!-- Sidebar -->
-        <div class="admin-sidebar" id="adminSidebar">
-            <div class="sidebar-logo">
-                <h4>BENTE SAIS</h4>
-                <small>Admin Panel</small>
-            </div>
+        <?php include 'admin_sidebar.php'; ?>
 
-            <nav class="sidebar-nav">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard.php">
-                            <i class="bi bi-speedometer2"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="orders.php">
-                            <i class="bi bi-bag-check"></i>
-                            <span>Orders</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="menu.php">
-                            <i class="bi bi-menu-button"></i>
-                            <span>Menu Management</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="customers.php">
-                            <i class="bi bi-people"></i>
-                            <span>Customers</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reports.php">
-                            <i class="bi bi-graph-up"></i>
-                            <span>Reports</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php" target="_blank">
-                            <i class="bi bi-shop"></i>
-                            <span>View Site</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-4">
-                        <a class="nav-link" href="../actions/logout.php">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-
-        <!-- Main Content -->
         <div class="admin-main">
-            <!-- Top Navigation -->
-            <nav class="top-navbar">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-outline-secondary me-3 d-lg-none" id="sidebarToggle">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    <h5 class="page-title">Order Management</h5>
-                </div>
-                <div class="user-info">
-                    <span class="welcome-text d-none d-md-inline">Welcome, <?php echo htmlspecialchars($admin_name); ?></span>
-                    <div class="dropdown">
-                        <div class="user-avatar dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
-                            <?php echo htmlspecialchars($admin_initial); ?>
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="../actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <?php include 'admin_header.php'; ?>
 
-            <!-- Content Area -->
             <div class="content-area">
-                <!-- Alerts -->
                 <?php if ($message): ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill me-2"></i><?php echo $message; ?>
@@ -799,7 +795,6 @@
                     </div>
                 <?php endif; ?>
 
-                <!-- Filter Section -->
                 <div class="filter-section">
                     <div class="row align-items-center">
                         <div class="col-md-12">
@@ -833,7 +828,6 @@
                     </div>
                 </div>
 
-                <!-- Orders Table -->
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5><i class="bi bi-bag-check"></i> Orders</h5>
@@ -882,7 +876,7 @@
                                             <th>Type</th>
                                             <th>Items</th>
                                             <th>Amount</th>
-                                            <th>Status</th>
+                                            <th>Payment</th> <th>Status</th>
                                             <th>Date</th>
                                             <th>Actions</th>
                                         </tr>
@@ -913,6 +907,9 @@
                                                     <strong class="text-success">₱<?php echo number_format($order['total_amount'], 2); ?></strong>
                                                 </td>
                                                 <td>
+                                                    <strong><?php echo htmlspecialchars($order['payment_method']); ?></strong>
+                                                </td>
+                                                <td>
                                                     <span class="order-status status-<?php echo $order['order_status']; ?>">
                                                         <?php echo ucfirst($order['order_status']); ?>
                                                     </span>
@@ -930,7 +927,7 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#viewOrderModal"
                                                                 data-order-id="<?php echo $order['order_id']; ?>">
-                                                            <i class="bi bi-eye"></i> View
+                                                            <i class="bi bi-eye"></i>
                                                         </button>
                                                         <?php if ($order['order_status'] !== 'completed' && $order['order_status'] !== 'cancelled'): ?>
                                                             <button class="btn btn-sm btn-outline-success update-status-btn"
@@ -939,7 +936,7 @@
                                                                     data-order-id="<?php echo $order['order_id']; ?>"
                                                                     data-order-number="<?php echo htmlspecialchars($order['order_number']); ?>"
                                                                     data-current-status="<?php echo $order['order_status']; ?>">
-                                                                <i class="bi bi-arrow-clockwise"></i> Update
+                                                                <i class="bi bi-arrow-clockwise"></i>
                                                             </button>
                                                         <?php endif; ?>
                                                     </div>
@@ -950,7 +947,6 @@
                                 </table>
                             </div>
 
-                            <!-- Pagination -->
                             <?php if ($total_pages > 1): ?>
                                 <div class="card-footer d-flex justify-content-between align-items-center">
                                     <div class="pagination-info">
@@ -995,7 +991,6 @@
         </div>
     </div>
 
-    <!-- View Order Modal -->
     <div class="modal fade" id="viewOrderModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -1004,8 +999,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="viewOrderContent">
-                    <!-- Order details will be loaded here via JavaScript -->
-                </div>
+                    </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -1013,7 +1007,6 @@
         </div>
     </div>
 
-    <!-- Update Status Modal -->
     <div class="modal fade" id="updateStatusModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1074,10 +1067,14 @@
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
+                // Use the bootstrap Alert instance to close
                 const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
+                if (bsAlert) {
+                    bsAlert.close();
+                }
             });
         }, 5000);
+
 
         // Update Status Modal
         document.addEventListener('click', function(e) {
@@ -1090,7 +1087,7 @@
             }
         });
 
-        // Update the viewOrderModal event listener
+        // Update the viewOrderModal event listener (JAVASCRIPT MODIFIED)
         document.addEventListener('click', function(e) {
             if (e.target.closest('.view-order-btn')) {
                 const btn = e.target.closest('.view-order-btn');
@@ -1145,7 +1142,7 @@
                         const contact = data.contact;
                         const address = data.address;
                         
-                        const orderDate = new Date(order.created_at).toLocaleDateString('en-US', {
+                        const orderDate = new Date(order.created_at).toLocaleString('en-US', {
                             year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                         });
 
@@ -1154,12 +1151,48 @@
                             addressHtml = `
                                 <div class="mb-2">
                                     <strong>Delivery Address:</strong><br>
-                                    ${address.street_address}, ${address.barangay}, ${address.city}, ${address.province}
+                                    ${address.street_address ? address.street_address + ', ' : ''}
+                                    ${address.barangay ? address.barangay + ', ' : ''}
+                                    ${address.city ? address.city + ', ' : ''}
+                                    ${address.province ? address.province : ''}
                                     ${address.zip_code ? `, ${address.zip_code}` : ''}
                                 </div>
                                 ${address.landmarks ? `<div class="mb-2"><strong>Landmarks:</strong> ${address.landmarks}</div>` : ''}
                             `;
                         }
+                        
+                        // --- NEW PAYMENT HTML BLOCK ---
+                        let paymentHtml = '';
+                        if (order.payment_method !== 'COD') {
+                            const payment = data.payment; // Get the new payment object
+                            if (payment) {
+                                let statusBadge = '';
+                                if (payment.status === 'verified') {
+                                    statusBadge = '<span class="badge bg-success">Verified</span>';
+                                } else if (payment.status === 'declined') {
+                                    statusBadge = '<span class="badge bg-danger">Declined</span>';
+                                } else {
+                                    statusBadge = '<span class="badge bg-warning text-dark">Pending Verification</span>';
+                                }
+                                
+                                paymentHtml = `
+                                    <hr>
+                                    <strong>Payment Status:</strong> ${statusBadge}<br>
+                                    ${payment.reference_number ? `<strong>Reference:</strong> ${payment.reference_number}<br>` : ''}
+                                    <strong>Receipt:</strong><br>
+                                    <a href="../${payment.receipt_image_url}" target="_blank">
+                                        <img src="../${payment.receipt_image_url}" 
+                                             class="img-fluid rounded border" 
+                                             style="max-height: 150px; margin-top: 5px;" 
+                                             alt="Receipt Preview">
+                                    </a>
+                                    ${payment.status === 'declined' && payment.admin_notes ? `<div class="mt-2"><strong>Reason for Decline:</strong><br><span class="text-danger">${payment.admin_notes}</span></div>` : ''}
+                                `;
+                            } else {
+                                paymentHtml = '<hr><strong>Payment Status:</strong> <span class="badge bg-secondary">No payment uploaded yet.</span>';
+                            }
+                        }
+                        // --- END OF NEW PAYMENT HTML BLOCK ---
 
                         document.getElementById('viewOrderContent').innerHTML = `
                             <div class="row">
@@ -1172,7 +1205,7 @@
                                         <strong>Payment:</strong> ${order.payment_method}<br>
                                         <strong>Status:</strong> <span class="order-status status-${order.order_status}">${order.order_status}</span><br>
                                         <strong>Total:</strong> ₱${parseFloat(order.total_amount).toFixed(2)}
-                                    </div>
+                                        ${paymentHtml} </div>
                                 </div>
                                 <div class="col-md-6">
                                     <h6 class="fw-bold mb-3">Customer Information</h6>

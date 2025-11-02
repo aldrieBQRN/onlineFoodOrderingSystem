@@ -244,6 +244,8 @@
     // Get admin name for display
     $admin_name    = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin';
     $admin_initial = strtoupper(substr($admin_name, 0, 1));
+    $pageTitle = "Customer Management";
+    $currentPage = "customers";
 ?>
 
 <!DOCTYPE html>
@@ -1055,82 +1057,10 @@
     <div class="admin-container">
         <div class="mobile-overlay" id="mobileOverlay"></div>
 
-        <div class="admin-sidebar" id="adminSidebar">
-            <div class="sidebar-logo">
-                <h4>BENTE SAIS</h4>
-                <small>Admin Panel</small>
-            </div>
-
-            <nav class="sidebar-nav">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard.php">
-                            <i class="bi bi-speedometer2"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.php">
-                            <i class="bi bi-bag-check"></i>
-                            <span>Orders</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="menu.php">
-                            <i class="bi bi-menu-button"></i>
-                            <span>Menu Management</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="customers.php">
-                            <i class="bi bi-people"></i>
-                            <span>Customers</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reports.php">
-                            <i class="bi bi-graph-up"></i>
-                            <span>Reports</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php" target="_blank">
-                            <i class="bi bi-shop"></i>
-                            <span>View Site</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-4">
-                        <a class="nav-link" href="../actions/logout.php">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <?php include 'admin_sidebar.php'; ?>
 
         <div class="admin-main">
-            <nav class="top-navbar">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-outline-secondary me-3 d-lg-none" id="sidebarToggle">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    <h5 class="page-title">Customer Management</h5>
-                </div>
-                <div class="user-info">
-                    <span class="welcome-text d-none d-md-inline">Welcome, <?php echo htmlspecialchars($admin_name); ?></span>
-                    <div class="dropdown">
-                        <div class="user-avatar dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
-                            <?php echo htmlspecialchars($admin_initial); ?>
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="../actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <?php include 'admin_header.php'; ?>
 
             <div class="content-area">
                 <?php if ($message): ?>

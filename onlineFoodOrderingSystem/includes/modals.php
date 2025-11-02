@@ -285,3 +285,58 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">GCash Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="paymentModalBody">
+                <div class="row">
+                    <div class="col-md-6 text-center border-end">
+                        <h6 class="fw-bold">Scan to Pay</h6>
+                        <p class="text-muted small">Please pay the exact amount for your order.</p>
+                        <img src="../uploads/qr/gcash_qr.png" id="gcashQrCode" class="img-fluid rounded mb-3" alt="GCash QR Code" style="max-width: 250px;">
+                        
+                        <h6 class="fw-bold">Or Pay To:</h6>
+                        <p class="mb-1">
+                            <strong>Account Name:</strong> <span id="gcashAccountName"></span>
+                        </p>
+                        <p>
+                            <strong>Account Number:</strong> <span id="gcashAccountNumber"></span>
+                        </p>
+                        
+                        <div class="alert alert-info" id="gcashInstructions">
+                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold">Upload Transaction Receipt</h6>
+                        <p class="text-muted small">After paying, please upload a screenshot of your transaction as proof of payment.</p>
+                        
+                        <form id="paymentUploadForm" enctype="multipart/form-data">
+                            <input type="hidden" name="order_id" id="paymentOrderId" value="">
+                            
+                            <div class="mb-3">
+                                <label for="reference_number" class="form-label">Reference Number (Optional)</label>
+                                <input type="text" class="form-control" id="reference_number" name="reference_number" placeholder="Enter GCash Ref. No.">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="receipt_image" class="form-label">Receipt Screenshot</label>
+                                <input type="file" class="form-control" id="receipt_image" name="receipt_image" accept="image/png, image/jpeg, image/jpg" required>
+                            </div>
+
+                            <div id="paymentUploadMessage" class="alert d-none" role="alert"></div>
+
+                            <button type="submit" class="btn btn-theme w-100 py-2 rounded-pill" id="uploadPaymentBtn">
+                                <i class="bi bi-upload"></i> Submit Payment
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
