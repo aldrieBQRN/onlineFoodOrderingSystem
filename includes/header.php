@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container py-3">
             <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">Quick</span>Crave
+                <span style="color: #32cd32;">BENTE</span>SAIS
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -12,7 +12,7 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">QuickCrave</h5>
+                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel"> <span style="color: #32cd32;">BENTE</span>SAIS</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
 
