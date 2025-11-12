@@ -57,7 +57,7 @@
         <div class="about-hero-overlay"></div>
         <div class="container text-center">
             <h1 class="display-3 fw-bold fade-in">Our Story</h1>
-            <p class="lead fw-light fade-in" style="transition-delay: 0.2s;">Discover the heart behind Bente Sais Lomihan</p>
+            <p class="lead fw-light fade-in" style="transition-delay: 0.2s;">Discover the heart behind Quick Crave</p>
         </div>
     </header>
 
@@ -70,15 +70,15 @@
                         <div class="card-body p-5">
                             <div class="text-center mb-5">
                                 <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Humble Beginnings</span>
-                                <h2 class="fw-bold display-5 my-3">The Legend of Bente Sais</h2>
+                                <h2 class="fw-bold display-5 my-3">The Legend of Quick Crave</h2>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-lg-6">
                                     <p class="lead text-muted mb-4">
-                                        "Bente Sais" isn't just a name; it's our heritage. It started in a small kitchen, born from a family recipe passed down through generations. Our founder, passionate about authentic Filipino flavors, dreamt of sharing the perfect bowl of Lomi—rich, hearty, and made with love.
+                                        "Quick Crave" isn't just a name; it's our heritage. It started in a small kitchen, born from a family recipe passed down through generations. Our founder, passionate about authentic Filipino flavors, dreamt of sharing the perfect bowl of Lomi—rich, hearty, and made with love.
                                     </p>
                                     <p class="text-muted">
-                                        From those humble beginnings, we've grown into a beloved community spot, but our core mission remains the same: to serve comfort in every bowl and treat every guest like family. We are "Bente Sais," a place where good food and good company come together.
+                                        From those humble beginnings, we've grown into a beloved community spot, but our core mission remains the same: to serve comfort in every bowl and treat every guest like family. We are "Quick Crave," a place where good food and good company come together.
                                     </p>
                                 </div>
                                 <div class="col-lg-6 text-center">

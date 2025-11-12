@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container py-3">
             <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">BENTE</span>SAIS
+                <span style="color: #32cd32;">QUICK</span>CRAVE
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"

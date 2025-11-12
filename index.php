@@ -15,7 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Bente Sais Lomihan - Home</title>
+    <title>Quick Crave Lomihan - Home</title>
     <style>
         /* Hero Section */
         .home-hero {
@@ -218,24 +218,270 @@
             margin: 0 auto;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* Enhanced Responsive Design */
+        @media (max-width: 1200px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 3rem;
+            }
+            
+            .category-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .categories-section,
+            .offers-section,
+            .testimonials-section {
+                padding: 60px 0;
+            }
+            
+            .category-image {
+                height: 180px;
+            }
+            
+            .category-icon,
+            .offer-icon {
+                font-size: 2.2rem;
+            }
+            
+            .cta-section {
+                padding: 80px 0;
+            }
+            
+            .cta-card {
+                padding: 50px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .home-hero {
+                min-height: 80vh;
+                padding-top: 100px;
+                margin-top: -70px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+                margin-bottom: 15px;
             }
             
             .hero-subtitle {
                 font-size: 1.1rem;
+                margin-bottom: 25px;
             }
             
             .hero-buttons {
                 flex-direction: column;
                 align-items: center;
+                gap: 12px;
             }
             
             .hero-buttons .btn {
                 width: 100%;
+                max-width: 280px;
+                margin: 0 auto;
+            }
+            
+            .categories-section,
+            .offers-section,
+            .testimonials-section {
+                padding: 50px 0;
+            }
+            
+            .category-card,
+            .offer-card,
+            .testimonial-card {
+                margin-bottom: 20px;
+            }
+            
+            .category-image {
+                height: 160px;
+            }
+            
+            .category-content,
+            .offer-card,
+            .testimonial-card {
+                padding: 20px;
+            }
+            
+            .category-icon,
+            .offer-icon {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+            
+            .testimonial-card::before {
+                font-size: 3rem;
+                top: 15px;
+                right: 20px;
+            }
+            
+            .testimonial-avatar {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .cta-section {
+                padding: 60px 0;
+            }
+            
+            .cta-card {
+                padding: 40px 25px;
+                border-radius: 16px;
+            }
+            
+            .display-5 {
+                font-size: 2rem;
+            }
+            
+            .lead {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .home-hero {
+                min-height: 70vh;
+                padding-top: 90px;
+                margin-top: -60px;
+            }
+            
+            .hero-content {
+                padding: 0 15px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .hero-badge {
+                font-size: 0.8rem;
+                padding: 6px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .categories-section,
+            .offers-section,
+            .testimonials-section {
+                padding: 40px 0;
+            }
+            
+            .category-image {
+                height: 140px;
+            }
+            
+            .category-content,
+            .offer-card,
+            .testimonial-card {
+                padding: 15px;
+            }
+            
+            .category-icon,
+            .offer-icon {
+                font-size: 1.8rem;
+            }
+            
+            .testimonial-card::before {
+                font-size: 2.5rem;
+                top: 10px;
+                right: 15px;
+            }
+            
+            .testimonial-avatar {
+                width: 45px;
+                height: 45px;
+                margin-right: 10px;
+            }
+            
+            .cta-section {
+                padding: 50px 0;
+            }
+            
+            .cta-card {
+                padding: 30px 20px;
+                margin: 0 15px;
+            }
+            
+            .display-5 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero-title {
+                font-size: 1.6rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .hero-buttons .btn {
+                font-size: 0.9rem;
+                padding: 0.7rem 1.2rem;
+            }
+            
+            .category-content h4,
+            .offer-card h4,
+            .testimonial-card h5 {
+                font-size: 1.1rem;
+            }
+            
+            .d-flex.gap-3 {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .d-flex.gap-3 .btn {
+                width: 100%;
                 max-width: 250px;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .category-card:hover {
+                transform: none;
+            }
+            
+            .offer-card:hover {
+                transform: none;
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .category-card:hover .category-image img {
+                transform: none;
+            }
+        }
+
+        /* High DPI screen optimizations */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .home-hero {
+                background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                            url('uploads/products/ChickenLomi640-1.jpg') center/cover no-repeat;
             }
         }
     </style>
@@ -250,7 +496,7 @@
         <div class="hero-content">
             <span class="hero-badge">Since 2008</span>
             <h1 class="hero-title">Authentic Filipino Flavors in Every Bowl</h1>
-            <p class="hero-subtitle">Experience the rich, hearty taste of traditional Lomi and more at Bente Sais Lomihan</p>
+            <p class="hero-subtitle">Experience the rich, hearty taste of traditional Lomi and more at Quick Crave Lomihan</p>
             <div class="hero-buttons">
                 <a href="#menu" class="btn btn-theme btn-lg rounded-pill px-4 py-2">
                     <i class="bi bi-utensils me-2"></i> Order Now
@@ -272,7 +518,7 @@
             </div>
             
             <div class="row g-4">
-                <div class="col-md-4 fade-in">
+                <div class="col-md-4 col-sm-6 col-12 fade-in">
                     <div class="category-card">
                         <div class="category-image">
                             <img src="uploads/products/ChickenLomi640-1.jpg" alt="Lomi Specials">
@@ -286,7 +532,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                <div class="col-md-4 col-sm-6 col-12 fade-in" style="transition-delay: 0.1s;">
                     <div class="category-card">
                         <div class="category-image">
                             <img src="uploads/products/ChickenLomi640-1.jpg" alt="Rice Meals">
@@ -300,7 +546,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                <div class="col-md-4 col-sm-6 col-12 fade-in" style="transition-delay: 0.2s;">
                     <div class="category-card">
                         <div class="category-image">
                             <img src="uploads/products/ChickenLomi640-1.jpg" alt="Appetizers">
@@ -327,13 +573,13 @@
     <section class="offers-section">
         <div class="container">
             <div class="text-center mb-5 fade-in">
-                <span class="text-uppercase fw-bold badge bg-white bg-opacity-20 text-white px-3 py-2 mb-3 d-inline-block">Limited Time</span>
+                <span class="text-uppercase fw-bold badge bg-white bg-opacity-20 text-black px-3 py-2 mb-3 d-inline-block">Limited Time</span>
                 <h2 class="fw-bold display-5 mb-3 text-white">Special Offers</h2>
                 <p class="lead text-white opacity-75">Don't miss out on these exclusive deals</p>
             </div>
             
             <div class="row g-4">
-                <div class="col-md-4 fade-in">
+                <div class="col-md-4 col-sm-6 col-12 fade-in">
                     <div class="offer-card">
                         <i class="bi bi-percent offer-icon"></i>
                         <h4 class="fw-bold mb-3">Family Bundle</h4>
@@ -342,7 +588,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                <div class="col-md-4 col-sm-6 col-12 fade-in" style="transition-delay: 0.1s;">
                     <div class="offer-card">
                         <i class="bi bi-truck offer-icon"></i>
                         <h4 class="fw-bold mb-3">Free Delivery</h4>
@@ -351,7 +597,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                <div class="col-md-4 col-sm-6 col-12 fade-in" style="transition-delay: 0.2s;">
                     <div class="offer-card">
                         <i class="bi bi-gift offer-icon"></i>
                         <h4 class="fw-bold mb-3">Loyalty Rewards</h4>
@@ -373,7 +619,7 @@
             </div>
             
             <div class="row g-4">
-                <div class="col-md-4 fade-in">
+                <div class="col-md-4 col-sm-6 col-12 fade-in">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-4">
                             <img src="uploads/profile/staff.jpg" alt="Customer" class="testimonial-avatar">
@@ -393,7 +639,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                <div class="col-md-4 col-sm-6 col-12 fade-in" style="transition-delay: 0.1s;">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-4">
                             <img src="uploads/profile/staff.jpg" alt="Customer" class="testimonial-avatar">
@@ -413,7 +659,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                <div class="col-md-4 col-sm-6 col-12 fade-in" style="transition-delay: 0.2s;">
                     <div class="testimonial-card">
                         <div class="d-flex align-items-center mb-4">
                             <img src="uploads/profile/staff.jpg" alt="Customer" class="testimonial-avatar">
@@ -429,7 +675,7 @@
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                         </div>
-                        <p class="text-muted">"As a food blogger, I've tried many Lomi places, but Bente Sais stands out. The authentic taste and cozy atmosphere make it my top recommendation in Nasugbu."</p>
+                        <p class="text-muted">"As a food blogger, I've tried many Lomi places, but Quick Crave stands out. The authentic taste and cozy atmosphere make it my top recommendation in Nasugbu."</p>
                     </div>
                 </div>
             </div>
@@ -442,7 +688,7 @@
             <div class="cta-card fade-in">
                 <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Ready to Order?</span>
                 <h2 class="fw-bold display-5 mb-3">Experience the Taste of Tradition</h2>
-                <p class="lead text-muted mb-4">Join hundreds of satisfied customers who have made Bente Sais their go-to spot for authentic Filipino comfort food.</p>
+                <p class="lead text-muted mb-4">Join hundreds of satisfied customers who have made Quick Crave their go-to spot for authentic Filipino comfort food.</p>
                 <div class="d-flex gap-3 justify-content-center flex-wrap">
                     <a href="index.php" class="btn btn-theme rounded-pill btn-lg px-4 py-2">
                         <i class="bi bi-utensils me-2"></i> Order Now
