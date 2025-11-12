@@ -8,7 +8,7 @@ if (!isset($currentPage)) {
 ?>
 <div class="admin-sidebar" id="adminSidebar">
     <div class="sidebar-logo">
-        <h4>BENTE SAIS</h4>
+        <h4>Quick Crave</h4>
         <small>Admin Panel</small>
     </div>
 
@@ -18,6 +18,12 @@ if (!isset($currentPage)) {
                 <a class="nav-link <?php echo ($currentPage === 'dashboard') ? 'active' : ''; ?>" href="dashboard.php">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo ($currentPage === 'pos') ? 'active' : ''; ?>" href="pos.php">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                    <span>Point of Sale (POS)</span>
                 </a>
             </li>
             <li class="nav-item">

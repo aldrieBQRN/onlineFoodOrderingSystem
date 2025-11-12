@@ -361,6 +361,12 @@
             padding: 1.25rem 1.5rem;
         }
 
+        /* MODIFIED: Added flex-wrap for responsiveness */
+        .card-header.d-flex {
+            flex-wrap: wrap;
+            gap: 1rem; 
+        }
+
         .card-header h5 {
             font-weight: 600;
             color: #2c3e50;
@@ -480,6 +486,11 @@
             top: 50%;
             transform: translateY(-50%);
             color: #6c757d;
+        }
+
+        /* MODIFIED: Added class for responsive search input */
+        .admin-search-group {
+            width: 250px;
         }
 
         /* Tables */
@@ -689,6 +700,19 @@
                 padding: 0.4rem 0.8rem;
                 font-size: 0.875rem;
             }
+
+            /* MODIFIED: Responsive search width */
+            .admin-search-group {
+                width: 200px;
+            }
+
+            /* MODIFIED: Center pagination on tablets */
+            .card-footer.d-flex {
+                justify-content: center !important;
+            }
+            .pagination-info {
+                width: 100%;
+            }
         }
 
         @media (max-width: 576px) {
@@ -701,6 +725,30 @@
             .card-header {
                 padding: 1rem;
             }
+            /* MODIFIED: Stack card header items */
+            .card-header.d-flex {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .card-header .d-flex.align-items-center.gap-3 {
+                flex-direction: column;
+                width: 100%;
+                align-items: stretch !important;
+            }
+            .admin-search-group {
+                width: 100%;
+            }
+            
+            /* MODIFIED: Stack status filter buttons */
+            .status-filter {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .status-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
             .card-body {
                 padding: 1rem;
             }
@@ -829,7 +877,7 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header d-flex justify-content-between align-items-center gap-3">
                         <h5><i class="bi bi-bag-check"></i> Orders</h5>
                         <div class="d-flex align-items-center gap-3">
                             <div class="text-muted small">
@@ -837,7 +885,7 @@
                             </div>
                             <form method="GET" class="search-form" id="searchForm">
                                 <input type="hidden" name="status" value="<?php echo htmlspecialchars($status_filter); ?>">
-                                <div class="input-group" style="width: 250px;">
+                                <div class="input-group admin-search-group">
                                     <input type="text" 
                                            class="form-control" 
                                            name="search" 
@@ -874,10 +922,11 @@
                                             <th>Order #</th>
                                             <th>Customer</th>
                                             <th>Type</th>
-                                            <th>Items</th>
+                                            <th class="d-none d-sm-table-cell">Items</th>
                                             <th>Amount</th>
-                                            <th>Payment</th> <th>Status</th>
-                                            <th>Date</th>
+                                            <th class="d-none d-sm-table-cell">Payment</th> 
+                                            <th>Status</th>
+                                            <th class="d-none d-md-table-cell">Date</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -900,13 +949,13 @@
                                                         <?php echo ucfirst($order['order_type']); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="d-none d-sm-table-cell">
                                                     <span class="fw-semibold"><?php echo $order['item_count']; ?> item(s)</span>
                                                 </td>
                                                 <td>
                                                     <strong class="text-success">₱<?php echo number_format($order['total_amount'], 2); ?></strong>
                                                 </td>
-                                                <td>
+                                                <td class="d-none d-sm-table-cell">
                                                     <strong><?php echo htmlspecialchars($order['payment_method']); ?></strong>
                                                 </td>
                                                 <td>
@@ -914,7 +963,7 @@
                                                         <?php echo ucfirst($order['order_status']); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="d-none d-md-table-cell">
                                                     <div class="small text-muted">
                                                         <?php echo date('M j, Y', strtotime($order['created_at'])); ?>
                                                         <br>
@@ -948,7 +997,7 @@
                             </div>
 
                             <?php if ($total_pages > 1): ?>
-                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
                                     <div class="pagination-info">
                                         Page <?php echo $page; ?> of <?php echo $total_pages; ?>
                                     </div>

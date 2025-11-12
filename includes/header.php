@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container py-3">
             <a class="navbar-brand fw-bold fs-3" href="index.php">
-                <span style="color: #32cd32;">BENTE</span>SAIS
+                <span style="color: #32cd32;">QUICK</span>CRAVE
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -12,7 +12,7 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel"> <span style="color: #32cd32;">BENTE</span>SAIS</h5>
+                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel"> <span style="color: #32cd32;">QUICK</span>CRAVE</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
 
@@ -20,18 +20,19 @@
 
                     <div class="d-lg-none w-100 mb-3 pb-3 border-bottom">
                         <?php if (isset($_SESSION['user_id'])): ?>
-                            <div class="dropdown">
-                                <a class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center w-100" href="#"
-                                id="offcanvasUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-2"></i>
-                                    <?php echo htmlspecialchars($_SESSION['full_name']); ?>
+                            <h6 class="mb-3 ps-2">
+                                Welcome, <?php echo htmlspecialchars($_SESSION['full_name']); ?>!
+                            </h6>
+                            <div class="d-grid gap-2">
+                                <a class="btn btn-outline-theme rounded-pill w-100 py-2" href="profile.php">
+                                    <i class="bi bi-person me-2"></i>Profile
                                 </a>
-                                <ul class="dropdown-menu w-100" aria-labelledby="offcanvasUserDropdown">
-                                    <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
-                                    <li><a class="dropdown-item" href="my_orders.php"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="actions/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li> 
-                                </ul>
+                                <a class="btn btn-outline-theme rounded-pill w-100 py-2" href="my_orders.php">
+                                    <i class="bi bi-bag-check me-2"></i>My Orders
+                                </a>
+                                <a class="btn btn-outline-danger rounded-pill w-100 py-2" href="actions/logout.php">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                </a>
                             </div>
                         <?php else: ?>
                             <div class="d-grid gap-2">
@@ -60,7 +61,7 @@
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center fw-medium" href="#"
                                 id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle fs-5 me-2"></i>
+                                    <i cla ss="bi bi-person-circle fs-5 me-2"></i>
                                     <?php echo htmlspecialchars($_SESSION['full_name']); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
