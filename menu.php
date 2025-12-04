@@ -24,7 +24,7 @@
     <main class="pt-3">
         <div class="bg-white text-center py-5">
             <h1 class="fw-bold">Our Menu</h1>
-            <p class="text-muted">Choose your favorite dish</p>
+            <p class="text-muted">Choose your favorite coffee</p>
         </div>
 
         <section id="menu" class="container pt-5">
@@ -46,15 +46,17 @@
 
                             while ($item = $items->fetch_assoc()) {
                                
-                                echo '
+
+                            echo '
                             <div class="col-md-4">
                             <div class="card">
                                 <img src="' . $item['image_url'] . '" class="card-img-top" alt="' . $item['item_name'] . '">
                                 <div class="card-body text-center">
                                 <h5 class="card-title fw-bold">' . $item['item_name'] . '</h5>';
 
-                                if (! empty($item['badge'])) {
-                                    echo '<span class="badge badge-theme mb-2">' . $item['badge'] . '</span>';
+                                // REPLACE THE BADGE CODE WITH THIS:
+                                if (! empty($item['description'])) {
+                                    echo '<p class="text-muted small mb-2">' . $item['description'] . '</p>';
                                 }
 
                                 echo '

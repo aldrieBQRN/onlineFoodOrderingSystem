@@ -61,7 +61,7 @@
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center fw-medium" href="#"
                                 id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i cla ss="bi bi-person-circle fs-5 me-2"></i>
+                                    <i class="bi bi-person-circle fs-5 me-2"></i>
                                     <?php echo htmlspecialchars($_SESSION['full_name']); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

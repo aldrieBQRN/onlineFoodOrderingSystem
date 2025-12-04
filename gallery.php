@@ -8,13 +8,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/bootstrapfile/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Gallery</title>
+    <title>Gallery - Quick Crave Café</title>
     <style>
         .gallery-hero {
             position: relative;
+            /* TODO: Replace with a coffee shop background image */
             background: url('uploads/products/ChickenLomi640-1.jpg') center/cover no-repeat;
             color: white;
             padding: 100px 0 60px;
@@ -218,50 +219,47 @@
 
     <header class="gallery-hero">
         <div class="container text-center">
-            <h1 class="display-3 fw-bold mb-3">Our Gallery</h1>
-            <p class="lead">Delicious moments captured in time</p>
+            <h1 class="display-3 fw-bold mb-3">Brewing Moments</h1>
+            <p class="lead">A glimpse into our coffee culture</p>
         </div>
     </header>
 
     <main class="container py-5">
-        <!-- Gallery Grid -->
         <div class="gallery-grid" id="galleryGrid">
-            <!-- Featured Items Only - 4 Photos -->
-            <div class="gallery-item fade-in" data-category="lomi">
-                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Special Lomi">
+            <div class="gallery-item fade-in" data-category="coffee">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Caramel Macchiato">
                 <div class="gallery-item-overlay">
-                    <p class="gallery-item-category">Lomi Specials</p>
-                    <h3 class="gallery-item-title">Special Lomi</h3>
+                    <p class="gallery-item-category">Signature Coffee</p>
+                    <h3 class="gallery-item-title">Caramel Macchiato</h3>
                 </div>
             </div>
 
-            <div class="gallery-item fade-in" data-category="meals">
-                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Tapsilog">
+            <div class="gallery-item fade-in" data-category="pastry">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Butter Croissant">
                 <div class="gallery-item-overlay">
-                    <p class="gallery-item-category">Rice Meals</p>
-                    <h3 class="gallery-item-title">Tapsilog</h3>
+                    <p class="gallery-item-category">Fresh Pastries</p>
+                    <h3 class="gallery-item-title">Butter Croissant</h3>
                 </div>
             </div>
 
-            <div class="gallery-item fade-in" data-category="snacks">
-                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Fresh Lumpia">
+            <div class="gallery-item fade-in" data-category="drinks">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Matcha Latte">
                 <div class="gallery-item-overlay">
-                    <p class="gallery-item-category">Snacks</p>
-                    <h3 class="gallery-item-title">Fresh Lumpia</h3>
+                    <p class="gallery-item-category">Frappes & Teas</p>
+                    <h3 class="gallery-item-title">Matcha Latte</h3>
                 </div>
             </div>
 
-            <div class="gallery-item fade-in" data-category="restaurant">
-                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Restaurant">
+            <div class="gallery-item fade-in" data-category="ambiance">
+                <img src="uploads/products/ChickenLomi640-1.jpg" alt="Coffee Bar">
                 <div class="gallery-item-overlay">
                     <p class="gallery-item-category">Our Place</p>
-                    <h3 class="gallery-item-title">Cozy Dining Area</h3>
+                    <h3 class="gallery-item-title">Cozy Coffee Bar</h3>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Gallery Modal -->
     <div class="gallery-modal" id="galleryModal">
         <div class="gallery-modal-content">
             <span class="gallery-modal-close" id="modalClose">&times;</span>
@@ -292,6 +290,7 @@
         const modalPrev = document.getElementById('modalPrev');
         const modalNext = document.getElementById('modalNext');
         
+        const galleryItems = document.querySelectorAll('.gallery-item'); // Define galleryItems here
         let currentIndex = 0;
         let visibleItems = [];
 
@@ -327,11 +326,13 @@
         }
 
         function showNext() {
+            if (visibleItems.length === 0) return;
             currentIndex = (currentIndex + 1) % visibleItems.length;
             openModal(visibleItems[currentIndex]);
         }
 
         function showPrev() {
+            if (visibleItems.length === 0) return;
             currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
             openModal(visibleItems[currentIndex]);
         }

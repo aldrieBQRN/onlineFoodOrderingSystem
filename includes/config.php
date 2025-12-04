@@ -7,13 +7,13 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// // Database configuration in local development
+// Database configuration in local development
 $host = "localhost";
 $user = "root";
 $pass = "";
 $db   = "online_ordering_system_db";
 
-// Database configuration in infinityfree hosting
+// // Database configuration in infinityfree hosting
 // $host = "sql101.infinityfree.com"; 
 // $user = "if0_40232593";           
 // $pass = "AldrieBQRN";

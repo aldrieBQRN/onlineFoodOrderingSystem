@@ -11,17 +11,14 @@
     $menu_items            = [];
     $active_tab            = isset($_GET['tab']) ? $_GET['tab'] : 'items';
     $search_term           = isset($_GET['search']) ? sanitize_input($_GET['search'], $conn) : '';
-    $category_search_term  = isset($_GET['category_search']) ? sanitize_input($_GET['category_search'], $conn) : ''; // NEW
+    $category_search_term  = isset($_GET['category_search']) ? sanitize_input($_GET['category_search'], $conn) : ''; 
     
-    // --- *** FIXED: Define root-relative path for DB and server-relative path for file operations *** ---
     define('UPLOAD_DB_PATH', 'uploads/products/');
     define('UPLOAD_SERVER_PATH', '../' . UPLOAD_DB_PATH);
 
 
     // Handle form actions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // ... (All your existing POST handling logic for add/edit/delete) ...
-        // (No changes needed here, keeping it collapsed for brevity)
         if (isset($_POST['add_category']) || isset($_POST['update_category'])) {
             $category_name = sanitize_input($_POST['category_name'], $conn);
             $description   = sanitize_input($_POST['description'], $conn);
@@ -57,14 +54,15 @@
             $category_id = sanitize_input($_POST['category_id'], $conn);
             $item_name   = sanitize_input($_POST['item_name'], $conn);
             $price       = sanitize_input($_POST['price'], $conn);
-            $badge       = sanitize_input($_POST['badge'], $conn);
+            // CHANGED: Get description instead of badge
+            $description = sanitize_input($_POST['description'], $conn);
 
             // Handle file upload
             $uploaded_image_path = '';
             if (isset($_FILES['item_image']) && $_FILES['item_image']['error'] === UPLOAD_ERR_OK) {
                 $upload_result = handleImageUpload($_FILES['item_image']);
                 if ($upload_result['success']) {
-                    $uploaded_image_path = $upload_result['file_path']; // This is now the DB path
+                    $uploaded_image_path = $upload_result['file_path']; 
                 } else {
                     $error = $upload_result['error'];
                 }
@@ -72,7 +70,6 @@
 
             // For update item, keep current image if no new upload
             if (isset($_POST['update_item']) && empty($uploaded_image_path) && ! $error) {
-                // Keep the current image
                 $item_id      = sanitize_input($_POST['item_id'], $conn);
                 $current_sql  = "SELECT image_url FROM menu_item WHERE item_id = ?";
                 $current_stmt = $conn->prepare($current_sql);
@@ -86,7 +83,8 @@
 
             if (! $error && ! empty($item_name) && ! empty($price)) {
                 if (isset($_POST['add_item'])) {
-                    $sql             = "INSERT INTO menu_item (category_id, item_name, price, badge, image_url) VALUES (?, ?, ?, ?, ?)";
+                    // CHANGED: SQL to insert description
+                    $sql             = "INSERT INTO menu_item (category_id, item_name, price, description, image_url) VALUES (?, ?, ?, ?, ?)";
                     $success_message = "Menu item added successfully!";
                 } else {
                     $item_id = sanitize_input($_POST['item_id'], $conn);
@@ -101,7 +99,6 @@
                         $current_row    = $current_result->fetch_assoc();
                         $current_stmt->close();
 
-                        // --- *** FIXED: Delete old file using server path *** ---
                         if ($current_row && ! empty($current_row['image_url']) && strpos($current_row['image_url'], UPLOAD_DB_PATH) !== false) {
                             $old_file_path = UPLOAD_SERVER_PATH . basename($current_row['image_url']);
                             if (file_exists($old_file_path)) {
@@ -110,15 +107,18 @@
                         }
                     }
 
-                    $sql             = "UPDATE menu_item SET category_id = ?, item_name = ?, price = ?, badge = ?, image_url = ? WHERE item_id = ?";
+                    // CHANGED: SQL to update description
+                    $sql             = "UPDATE menu_item SET category_id = ?, item_name = ?, price = ?, description = ?, image_url = ? WHERE item_id = ?";
                     $success_message = "Menu item updated successfully!";
                 }
 
                 $stmt = $conn->prepare($sql);
                 if (isset($_POST['add_item'])) {
-                    $stmt->bind_param("issss", $category_id, $item_name, $price, $badge, $uploaded_image_path);
+                    // CHANGED: Bind description
+                    $stmt->bind_param("issss", $category_id, $item_name, $price, $description, $uploaded_image_path);
                 } else {
-                    $stmt->bind_param("issssi", $category_id, $item_name, $price, $badge, $uploaded_image_path, $item_id);
+                    // CHANGED: Bind description
+                    $stmt->bind_param("issssi", $category_id, $item_name, $price, $description, $uploaded_image_path, $item_id);
                 }
 
                 if ($stmt->execute()) {
@@ -134,7 +134,6 @@
         } elseif (isset($_POST['delete_item'])) {
             $item_id = sanitize_input($_POST['item_id'], $conn);
 
-            // Get image path to delete file if it exists
             $current_sql  = "SELECT image_url FROM menu_item WHERE item_id = ?";
             $current_stmt = $conn->prepare($current_sql);
             $current_stmt->bind_param("i", $item_id);
@@ -143,7 +142,6 @@
             $current_row    = $current_result->fetch_assoc();
             $current_stmt->close();
 
-            // --- *** FIXED: Delete file using server path *** ---
             if ($current_row && ! empty($current_row['image_url']) && strpos($current_row['image_url'], UPLOAD_DB_PATH) !== false) {
                 $file_to_delete = UPLOAD_SERVER_PATH . basename($current_row['image_url']);
                 if (file_exists($file_to_delete)) {
@@ -165,7 +163,6 @@
         } elseif (isset($_POST['delete_category'])) {
             $category_id = sanitize_input($_POST['category_id'], $conn);
 
-            // Check if category has items
             $check_sql  = "SELECT COUNT(*) as item_count FROM menu_item WHERE category_id = ?";
             $check_stmt = $conn->prepare($check_sql);
             $check_stmt->bind_param("i", $category_id);
@@ -195,12 +192,10 @@
     // Function to handle image upload
     function handleImageUpload($file)
     {
-        // --- *** FIXED: Use defined server path for file operations *** ---
         $physical_upload_dir = UPLOAD_SERVER_PATH; 
         $max_file_size = 5 * 1024 * 1024; // 5MB
         $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
-        // Create uploads directory if it doesn't exist
         if (! is_dir($physical_upload_dir)) {
             mkdir($physical_upload_dir, 0755, true);
         }
@@ -208,28 +203,22 @@
         $file_name = basename($file['name']);
         $file_tmp  = $file['tmp_name'];
         $file_size = $file['size'];
-        $file_type = mime_content_type($file_tmp); // More reliable type check
+        $file_type = mime_content_type($file_tmp); 
 
-        // Validate file size
         if ($file_size > $max_file_size) {
             return ['success' => false, 'error' => 'File size too large. Maximum size is 5MB.'];
         }
 
-        // Validate file type
         if (! in_array($file_type, $allowed_types)) {
             return ['success' => false, 'error' => 'Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.'];
         }
 
-        // Generate unique filename
         $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
         $unique_name    = uniqid() . '_' . time() . '.' . $file_extension;
         
-        // --- *** FIXED: Use physical path for moving file *** ---
         $physical_file_path = $physical_upload_dir . $unique_name;
 
-        // Move uploaded file
         if (move_uploaded_file($file_tmp, $physical_file_path)) {
-            // --- *** FIXED: Return the database-friendly path *** ---
             $db_path = UPLOAD_DB_PATH . $unique_name;
             return ['success' => true, 'file_path' => $db_path];
         } else {
@@ -238,8 +227,6 @@
     }
 
     // --- Load Categories ---
-    
-    // 1. Load ALL categories (for modal dropdowns)
     $all_cat_sql = "SELECT * FROM menu_category ORDER BY category_name";
     $result = $conn->query($all_cat_sql);
     if ($result && $result->num_rows > 0) {
@@ -248,7 +235,6 @@
         }
     }
     
-    // 2. Load FILTERED categories (for category tab display)
     $cat_sql = "SELECT * FROM menu_category";
     $cat_params = [];
     $cat_types  = '';
@@ -275,12 +261,9 @@
     $cat_stmt->close();
     
     // --- Load Menu Items with Search and Pagination ---
-
-    // Pagination variables
     $per_page     = 10;
     $total_items  = 0;
     
-    // Base SQL for counting
     $count_sql = "SELECT COUNT(mi.item_id) as total
                   FROM menu_item mi
                   LEFT JOIN menu_category mc ON mi.category_id = mc.category_id
@@ -311,8 +294,6 @@
     if ($current_page > $total_pages && $total_pages > 0) { $current_page = $total_pages; }
     $offset       = ($current_page - 1) * $per_page;
 
-
-    // Main query for loading items
     $sql = "SELECT mi.*, mc.category_name
             FROM menu_item mi
             LEFT JOIN menu_category mc ON mi.category_id = mc.category_id
@@ -324,7 +305,6 @@
     
     $sql .= " ORDER BY mc.category_name, mi.item_name LIMIT ? OFFSET ?";
     
-    // Add pagination params
     $params[] = $per_page;
     $params[] = $offset;
     $types .= 'ii';
@@ -343,7 +323,6 @@
     }
     $stmt->close();
     
-    // Calculate total menu value (all items, not just paginated)
     $total_menu_value = 0;
     $value_sql = "SELECT SUM(price) as total_value FROM menu_item";
     $value_result = $conn->query($value_sql);
@@ -351,16 +330,15 @@
         $total_menu_value = $value_result->fetch_assoc()['total_value'] ?: 0;
     }
     
-    // Get featured items count (all items)
-    $featured_count = 0;
-    $featured_sql = "SELECT COUNT(*) as featured FROM menu_item WHERE badge IS NOT NULL AND badge != ''";
-    $featured_result = $conn->query($featured_sql);
-    if($featured_result) {
-        $featured_count = $featured_result->fetch_assoc()['featured'] ?: 0;
+    // CHANGED: Count items with descriptions instead of badges
+    $desc_count = 0;
+    $desc_sql = "SELECT COUNT(*) as desc_count FROM menu_item WHERE description IS NOT NULL AND description != ''";
+    $desc_result = $conn->query($desc_sql);
+    if($desc_result) {
+        $desc_count = $desc_result->fetch_assoc()['desc_count'] ?: 0;
     }
 
 
-    // Get admin name for display
     $admin_name    = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin';
     $admin_initial = strtoupper(substr($admin_name, 0, 1));
     $pageTitle = "Menu Management";
@@ -398,7 +376,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fb; /* Match dashboard */
+            background-color: #f5f7fb; 
             color: #334155;
             line-height: 1.6;
         }
@@ -408,7 +386,6 @@
             min-height: 100vh;
         }
 
-         /* Sidebar Styles */
         .admin-sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--dark) 0%, #2a4a2a 100%);
@@ -477,7 +454,6 @@
             flex-shrink: 0;
         }
 
-        /* Main Content */
         .admin-main {
             flex: 1;
             margin-left: var(--sidebar-width);
@@ -524,16 +500,14 @@
             font-weight: 600;
         }
 
-        /* Content Area */
         .content-area {
             flex: 1;
             padding: 1.5rem;
         }
 
-        /* Tabs */
         .nav-tabs {
             border-bottom: 2px solid #e9ecef;
-            margin-bottom: 1.5rem; /* Reduced margin */
+            margin-bottom: 1.5rem; 
         }
 
         .nav-tabs .nav-link {
@@ -551,7 +525,6 @@
             border-bottom: 3px solid var(--primary);
         }
 
-        /* General Card */
         .content-card {
             background: white;
             border-radius: var(--card-radius);
@@ -593,7 +566,6 @@
             padding: 1rem 1.5rem;
         }
 
-        /* Buttons */
         .btn {
             border-radius: 8px;
             padding: 0.5rem 1rem;
@@ -629,7 +601,6 @@
             font-size: 0.875rem;
         }
 
-        /* Tables */
         .table {
             margin: 0;
         }
@@ -654,7 +625,6 @@
             background-color: #f8fafc;
         }
 
-        /* Badges */
         .badge {
             padding: 0.4rem 0.8rem;
             border-radius: 50px;
@@ -662,11 +632,6 @@
             font-weight: 600;
         }
 
-        .badge-new { background: #d4edda; color: #155724; }
-        .badge-bestseller { background: #fff3cd; color: #856404; }
-        .badge-special { background: #d1ecf1; color: #0c5460; }
-
-        /* Menu Item Image */
         .menu-item-image {
             width: 60px;
             height: 60px;
@@ -688,7 +653,6 @@
             border: 2px dashed #dee2e6;
         }
 
-        /* Stats Cards (Copied from admin_customers) */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -736,7 +700,6 @@
             margin-top: 0.25rem;
         }
 
-        /* Empty States */
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
@@ -749,13 +712,12 @@
             opacity: 0.5;
         }
 
-        /* Alerts */
         .alert {
             border: none;
             border-radius: var(--card-radius);
             padding: 1rem 1.5rem;
             border-left: 4px solid;
-            margin-bottom: 1.5rem; /* Added margin */
+            margin-bottom: 1.5rem;
         }
 
         .alert-success {
@@ -770,13 +732,11 @@
             border-left-color: #dc3545;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 0.5rem;
         }
 
-        /* Modal Styles */
         .modal-content {
             border: none;
             border-radius: var(--card-radius);
@@ -803,7 +763,6 @@
             padding: 1rem 1.5rem;
         }
 
-        /* Forms */
         .form-label {
             font-weight: 500;
             color: #374151;
@@ -821,7 +780,6 @@
             box-shadow: 0 0 0 0.2rem rgba(50, 205, 50, 0.1);
         }
 
-        /* Search Box (Copied from admin_customers) */
         .search-container {
             position: relative;
             max-width: 300px;
@@ -843,7 +801,6 @@
             z-index: 10;
         }
 
-        /* Pagination (Copied from admin_customers) */
         .pagination {
             margin-bottom: 0;
         }
@@ -863,7 +820,6 @@
             color: #6c757d;
         }
         
-        /* Category Card (in tab) */
         .category-card {
             border: none;
             border-radius: var(--card-radius);
@@ -877,7 +833,6 @@
              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Mobile Styles */
         .mobile-overlay {
             display: none;
             position: fixed;
@@ -965,8 +920,8 @@
                         <div class="stat-label">Total Menu Value</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number"><?php echo $featured_count; ?></div>
-                        <div class="stat-label">Featured Items</div>
+                        <div class="stat-number"><?php echo $desc_count; ?></div>
+                        <div class="stat-label">Items w/ Desc.</div>
                     </div>
                 </div>
 
@@ -1031,8 +986,7 @@
                                                     <th>Item</th>
                                                     <th>Category</th>
                                                     <th>Price</th>
-                                                    <th>Badge</th>
-                                                    <th>Actions</th>
+                                                    <th>Description</th> <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1057,13 +1011,10 @@
                                                         <td><?php echo htmlspecialchars($item['category_name']); ?></td>
                                                         <td><strong class="text-success">₱<?php echo number_format($item['price'], 2); ?></strong></td>
                                                         <td>
-                                                            <?php if (! empty($item['badge'])): ?>
-                                                                <?php
-                                                                    $badge_class = 'badge-' . strtolower(str_replace(' ', '', $item['badge']));
-                                                                ?>
-                                                                <span class="badge <?php echo $badge_class; ?>"><?php echo htmlspecialchars($item['badge']); ?></span>
+                                                            <?php if (! empty($item['description'])): ?>
+                                                                <small class="text-muted"><?php echo htmlspecialchars(substr($item['description'], 0, 50)) . (strlen($item['description']) > 50 ? '...' : ''); ?></small>
                                                             <?php else: ?>
-                                                                <span class="text-muted">-</span>
+                                                                <span class="text-muted small">-</span>
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
@@ -1075,7 +1026,7 @@
                                                                         data-item-name="<?php echo htmlspecialchars($item['item_name']); ?>"
                                                                         data-category-id="<?php echo $item['category_id']; ?>"
                                                                         data-price="<?php echo $item['price']; ?>"
-                                                                        data-badge="<?php echo htmlspecialchars($item['badge']); ?>"
+                                                                        data-description="<?php echo htmlspecialchars($item['description']); ?>"
                                                                         data-image-url="<?php echo htmlspecialchars($item['image_url']); ?>">
                                                                     <i class="bi bi-pencil"></i> Edit
                                                                 </button>
@@ -1260,13 +1211,8 @@
                             <input type="number" class="form-control" name="price" step="0.01" min="0" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Badge</label>
-                            <select class="form-select" name="badge">
-                                <option value="">No Badge</option>
-                                <option value="New">New</option>
-                                <option value="Best Seller">Best Seller</option>
-                                <option value="Special">Special</option>
-                            </select>
+                            <label class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" name="description" rows="2"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Item Image</label>
@@ -1311,13 +1257,8 @@
                             <input type="number" class="form-control" name="price" id="edit_item_price" step="0.01" min="0" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Badge</label>
-                            <select class="form-select" name="badge" id="edit_item_badge">
-                                <option value="">No Badge</option>
-                                <option value="New">New</option>
-                                <option value="Best Seller">Best Seller</option>
-                                <option value="Special">Special</option>
-                            </select>
+                            <label class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" name="description" id="edit_item_description" rows="2"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Current Image</label>
@@ -1440,7 +1381,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Mobile sidebar toggle
         const sidebarToggle = document.getElementById('sidebarToggle');
         const adminSidebar = document.getElementById('adminSidebar');
         const mobileOverlay = document.getElementById('mobileOverlay');
@@ -1455,7 +1395,6 @@
             mobileOverlay.classList.remove('active');
         });
 
-        // Auto-dismiss alerts
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert:not(.alert-dismissible)');
             alerts.forEach(alert => {
@@ -1463,7 +1402,6 @@
             });
         }, 5000);
         
-        // Handle persistent tabs on reload
         const urlParams = new URLSearchParams(window.location.search);
         const activeTabName = urlParams.get('tab') || 'items';
         const activeTabEl = document.querySelector(`.nav-tabs a[href="#${activeTabName}"]`);
@@ -1472,14 +1410,12 @@
             activeTab.show();
         }
         
-        // Update URL on tab switch
         const menuTabs = document.querySelectorAll('#menuTabs a[data-bs-toggle="tab"]');
         menuTabs.forEach(tab => {
             tab.addEventListener('shown.bs.tab', event => {
                 const newTab = event.target.getAttribute('href').substring(1);
                 const newUrl = new URL(window.location);
                 newUrl.searchParams.set('tab', newTab);
-                // Clear search/page params when switching tabs
                 newUrl.searchParams.delete('search');
                 newUrl.searchParams.delete('category_search');
                 newUrl.searchParams.delete('page');
@@ -1496,14 +1432,13 @@
                 document.getElementById('edit_item_name').value = btn.dataset.itemName;
                 document.getElementById('edit_item_category').value = btn.dataset.categoryId;
                 document.getElementById('edit_item_price').value = btn.dataset.price;
-                document.getElementById('edit_item_badge').value = btn.dataset.badge;
+                // CHANGED: Populate description field
+                document.getElementById('edit_item_description').value = btn.dataset.description;
 
-                // Display current image
                 const currentImageContainer = document.getElementById('edit_current_image');
                 const imageUrl = btn.dataset.imageUrl;
 
                 if (imageUrl) {
-                    // --- *** FIXED: Prepend ../ to image src for admin display *** ---
                     currentImageContainer.innerHTML = `
                         <img src="../${imageUrl}" alt="Current image" class="menu-item-image" style="width: 100px; height: 100px;">
                     `;
@@ -1518,7 +1453,6 @@
             }
         });
 
-        // Clear file input when modal is closed
         document.addEventListener('hidden.bs.modal', function (e) {
             if (e.target.id === 'addItemModal' || e.target.id === 'editItemModal') {
                 const fileInput = e.target.querySelector('input[type="file"]');
@@ -1528,7 +1462,6 @@
             }
         });
 
-        // Edit Category Modal
         document.addEventListener('click', function(e) {
             if (e.target.closest('.edit-category-btn')) {
                 const btn = e.target.closest('.edit-category-btn');
@@ -1538,7 +1471,6 @@
             }
         });
 
-        // Delete Item Modal
         document.addEventListener('click', function(e) {
             if (e.target.closest('.delete-item-btn')) {
                 const btn = e.target.closest('.delete-item-btn');
@@ -1547,7 +1479,6 @@
             }
         });
 
-        // Delete Category Modal
         document.addEventListener('click', function(e) {
             if (e.target.closest('.delete-category-btn')) {
                 const btn = e.target.closest('.delete-category-btn');
@@ -1569,7 +1500,6 @@
             }
         });
         
-        // Live Search Table Function
         function searchTable() {
             const input = document.getElementById("searchInput");
             if (!input) return;
@@ -1581,11 +1511,10 @@
             const rows = table.getElementsByTagName("tr");
             let visibleCount = 0;
 
-            for (let i = 1; i < rows.length; i++) { // skip header row (index 0)
+            for (let i = 1; i < rows.length; i++) { 
                 const cells = rows[i].getElementsByTagName("td");
                 let found = false;
                 
-                // Check cell 0 (Item Name) and 1 (Category)
                 if (cells[0] && cells[0].textContent.toLowerCase().includes(filter)) {
                     found = true;
                 } else if (cells[1] && cells[1].textContent.toLowerCase().includes(filter)) {
@@ -1601,7 +1530,6 @@
             }
         }
         
-        // NEW Function for Category Search
         function searchCategories() {
             const input = document.getElementById("categorySearchInput");
             if (!input) return;
@@ -1634,19 +1562,17 @@
                 }
             }
             
-            // Toggle empty state message
             if (emptyState) {
                 if (visibleCount === 0 && cards.length > 0) {
                     list.style.display = "none";
                     emptyState.style.display = "";
                 } else {
-                    list.style.display = ""; // Assumes list is display:flex/grid via .row
+                    list.style.display = ""; 
                     emptyState.style.display = "none";
                 }
             }
         }
         
-        // Add listeners
         const itemSearchInput = document.getElementById('searchInput');
         if (itemSearchInput) {
             itemSearchInput.addEventListener('keyup', searchTable);
@@ -1656,11 +1582,9 @@
         if (categorySearchInput) {
             categorySearchInput.addEventListener('keyup', searchCategories);
         }
-        
     </script>
 </body>
 </html>
 <?php
-    // Close database connection
 $conn->close();
 ?>

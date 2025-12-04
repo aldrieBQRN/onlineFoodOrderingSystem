@@ -15,10 +15,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>About Us</title>
+    <title>About Us - Quick Crave Café</title>
     <style>
         .about-hero {
             position: relative;
+            /* TODO: Replace with a coffee shop background image */
             background: url('uploads/products/ChickenLomi640-1.jpg') center/cover no-repeat;
             min-height: 60vh;
             display: flex;
@@ -56,34 +57,33 @@
     <header class="about-hero">
         <div class="about-hero-overlay"></div>
         <div class="container text-center">
-            <h1 class="display-3 fw-bold fade-in">Our Story</h1>
-            <p class="lead fw-light fade-in" style="transition-delay: 0.2s;">Discover the heart behind Quick Crave</p>
+            <h1 class="display-3 fw-bold fade-in">Our Brewing Story</h1>
+            <p class="lead fw-light fade-in" style="transition-delay: 0.2s;">Discover the passion behind every cup at Quick Crave</p>
         </div>
     </header>
 
     <main class="py-5">
-        <!-- Story Section -->
         <section class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="card border-0 shadow-lg fade-in">
                         <div class="card-body p-5">
                             <div class="text-center mb-5">
-                                <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Humble Beginnings</span>
-                                <h2 class="fw-bold display-5 my-3">The Legend of Quick Crave</h2>
+                                <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">From Bean to Cup</span>
+                                <h2 class="fw-bold display-5 my-3">The Art of Quick Crave</h2>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-lg-6">
                                     <p class="lead text-muted mb-4">
-                                        "Quick Crave" isn't just a name; it's our heritage. It started in a small kitchen, born from a family recipe passed down through generations. Our founder, passionate about authentic Filipino flavors, dreamt of sharing the perfect bowl of Lomi—rich, hearty, and made with love.
+                                        "Quick Crave" started with a simple vision: to bring the warmth of artisanal coffee to our community. It began with a passion for sourcing the finest beans and a dedication to the craft of roasting.
                                     </p>
                                     <p class="text-muted">
-                                        From those humble beginnings, we've grown into a beloved community spot, but our core mission remains the same: to serve comfort in every bowl and treat every guest like family. We are "Quick Crave," a place where good food and good company come together.
+                                        From a small corner café, we've grown into a beloved daily stop for coffee lovers. Our mission remains simple: to serve the perfect brew—rich, aromatic, and made with precision. We are "Quick Crave," a place where great conversations start over a great cup of coffee.
                                     </p>
                                 </div>
                                 <div class="col-lg-6 text-center">
                                     <div class="ratio ratio-1x1 rounded-3 overflow-hidden shadow">
-                                        <img src="uploads/products/ChickenLomi640-1.jpg" alt="Traditional Cooking" class="img-fluid" style="object-fit: cover;">
+                                        <img src="uploads/products/ChickenLomi640-1.jpg" alt="Coffee Brewing" class="img-fluid" style="object-fit: cover;">
                                     </div>
                                 </div>
                             </div>
@@ -93,103 +93,100 @@
             </div>
         </section>
 
-        <!-- Stats Section -->
         <section class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
             <div class="container">
                 <div class="row g-4 text-center">
                     <div class="col-md-3 fade-in">
                         <div class="p-4">
                             <h2 class="fw-bold text-primary display-4">15+</h2>
-                            <p class="text-muted fw-semibold">Years of Service</p>
+                            <p class="text-muted fw-semibold">Years Brewing</p>
                         </div>
                     </div>
                     <div class="col-md-3 fade-in" style="transition-delay: 0.1s;">
                         <div class="p-4">
                             <h2 class="fw-bold text-primary display-4">50K+</h2>
-                            <p class="text-muted fw-semibold">Happy Customers</p>
+                            <p class="text-muted fw-semibold">Cups Served</p>
                         </div>
                     </div>
                     <div class="col-md-3 fade-in" style="transition-delay: 0.2s;">
                         <div class="p-4">
-                            <h2 class="fw-bold text-primary display-4">100+</h2>
-                            <p class="text-muted fw-semibold">Menu Items</p>
+                            <h2 class="fw-bold text-primary display-4">20+</h2>
+                            <p class="text-muted fw-semibold">Coffee Blends</p>
                         </div>
                     </div>
                     <div class="col-md-3 fade-in" style="transition-delay: 0.3s;">
                         <div class="p-4">
-                            <h2 class="fw-bold text-primary display-4">24/7</h2>
-                            <p class="text-muted fw-semibold">Customer Support</p>
+                            <h2 class="fw-bold text-primary display-4">Daily</h2>
+                            <p class="text-muted fw-semibold">Fresh Pastries</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Values Section -->
         <section class="container-fluid py-5">
             <div class="container">
                 <div class="text-center mb-5 fade-in">
                     <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Our Promise</span>
                     <h2 class="fw-bold display-5 mb-3">Our Core Values</h2>
-                    <p class="lead text-muted">What makes us different</p>
+                    <p class="lead text-muted">What makes our coffee different</p>
                 </div>
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4 d-flex align-items-stretch">
                         <div class="value-card fade-in" style="transition-delay: 0.2s;">
-                            <i class="bi bi-egg-fried"></i>
-                            <h4 class="fw-semibold my-3">Authentic Flavor</h4>
-                            <p class="text-muted">We honor tradition. Our recipes are authentic, using time-tested techniques and the finest local ingredients to bring you the true taste of home.</p>
+                            <i class="bi bi-cup-hot"></i>
+                            <h4 class="fw-semibold my-3">Premium Beans</h4>
+                            <p class="text-muted">We source only the highest quality Arabica and Robusta beans from sustainable farms, ensuring a rich and complex flavor profile in every sip.</p>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-stretch">
                         <div class="value-card fade-in" style="transition-delay: 0.4s;">
-                            <i class="bi bi-gem"></i>
-                            <h4 class="fw-semibold my-3">Quality Ingredients</h4>
-                            <p class="text-muted">Freshness is our promise. We partner with local suppliers to source the best produce and meats, ensuring every dish is fresh, wholesome, and delicious.</p>
+                            <i class="bi bi-fire"></i>
+                            <h4 class="fw-semibold my-3">Master Roasting</h4>
+                            <p class="text-muted">Freshness is key. Our beans are roasted in small batches to unlock their full potential, delivering the freshest and most aromatic experience.</p>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-stretch">
                         <div class="value-card fade-in" style="transition-delay: 0.6s;">
                             <i class="bi bi-people-fill"></i>
-                            <h4 class="fw-semibold my-3">Community First</h4>
-                            <p class="text-muted">We are more than a restaurant; we are a neighbor. We strive to be a warm, welcoming space for families, friends, and our entire community to gather.</p>
+                            <h4 class="fw-semibold my-3">Community Hub</h4>
+                            <p class="text-muted">We are more than a coffee shop; we are a workspace, a meeting place, and a relaxation spot. We strive to create a warm atmosphere for everyone.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Commitment Section -->
         <section class="container py-5 my-5">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6">
                     <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-lg fade-in-left">
-                        <img src="uploads/products/ChickenLomi640-1.jpg" alt="Restaurant Interior" class="img-fluid" style="object-fit: cover;">
+                        <img src="uploads/products/ChickenLomi640-1.jpg" alt="Cafe Interior" class="img-fluid" style="object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-6 fade-in-right" style="transition-delay: 0.2s;">
                     <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Our Commitment</span>
-                    <h2 class="fw-bold display-5 my-3">More Than Just Lomi</h2>
+                    <h2 class="fw-bold display-5 my-3">More Than Just Coffee</h2>
                     <p class="lead text-muted mb-4">
-                        While our name celebrates our famous Lomi, our passion extends to every dish on our menu. We are committed to providing an exceptional dining experience, whether you're joining us in-house or ordering online.
+                        While we are famous for our espresso, our passion extends to our selection of teas, frappes, and freshly baked pastries. We are committed to providing a cozy escape from the daily grind.
                     </p>
                     <div class="row g-3 mb-4">
                         <div class="col-6">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span class="fw-semibold">Fast Service</span>
+                                <span class="fw-semibold">Expert Baristas</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span class="fw-semibold">Friendly Staff</span>
+                                <span class="fw-semibold">Cozy Ambiance</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span class="fw-semibold">Fresh Ingredients</span>
+                                <span class="fw-semibold">Free Wi-Fi</span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -200,11 +197,11 @@
                         </div>
                     </div>
                     <p class="text-muted mb-4">
-                        Our team is dedicated to fast service, friendly smiles, and food that warms the soul. Thank you for letting us be a part of your day.
+                        Our team is dedicated to crafting the perfect drink, serving with a smile, and making your day a little brighter.
                     </p>
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="index.php" class="btn btn-theme rounded-pill btn-lg px-4">
-                            View Our Menu <i class="bi bi-arrow-right-short"></i>
+                        <a href="menu.php" class="btn btn-theme rounded-pill btn-lg px-4">
+                            View Menu <i class="bi bi-arrow-right-short"></i>
                         </a>
                         <a href="contact.php" class="btn btn-outline-primary rounded-pill btn-lg px-4">
                             Contact Us <i class="bi bi-telephone"></i>
@@ -214,24 +211,23 @@
             </div>
         </section>
 
-        <!-- Team Section -->
         <section class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
             <div class="container">
                 <div class="text-center mb-5 fade-in">
                     <span class="text-uppercase fw-bold badge bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 d-inline-block">Meet Us</span>
-                    <h2 class="fw-bold display-5 mb-3">Our Passionate Team</h2>
-                    <p class="lead text-muted">The people behind your favorite dishes</p>
+                    <h2 class="fw-bold display-5 mb-3">Our Barista Team</h2>
+                    <p class="lead text-muted">The artists behind your favorite drinks</p>
                 </div>
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4 fade-in">
                         <div class="card border-0 shadow-sm h-100 text-center">
                             <div class="card-body p-4">
                                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden mx-auto mb-3" style="max-width: 120px;">
-                                    <img src="uploads/profile/staff.jpg" alt="Head Chef" class="img-fluid" style="object-fit: cover;">
+                                    <img src="uploads/profile/staff.jpg" alt="Head Barista" class="img-fluid" style="object-fit: cover;">
                                 </div>
                                 <h5 class="fw-bold mb-1">Juan Dela Cruz</h5>
-                                <p class="text-primary mb-3">Head Chef</p>
-                                <p class="text-muted small">With over 15 years of experience, Chef Juan brings traditional Filipino flavors to life with a modern touch.</p>
+                                <p class="text-primary mb-3">Head Barista</p>
+                                <p class="text-muted small">With over 10 years of experience, Juan has mastered the art of latte design and espresso extraction.</p>
                             </div>
                         </div>
                     </div>
@@ -239,11 +235,11 @@
                         <div class="card border-0 shadow-sm h-100 text-center">
                             <div class="card-body p-4">
                                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden mx-auto mb-3" style="max-width: 120px;">
-                                    <img src="uploads/profile/staff.jpg" alt="Restaurant Manager" class="img-fluid" style="object-fit: cover;">
+                                    <img src="uploads/profile/staff.jpg" alt="Café Manager" class="img-fluid" style="object-fit: cover;">
                                 </div>
                                 <h5 class="fw-bold mb-1">Maria Santos</h5>
-                                <p class="text-primary mb-3">Restaurant Manager</p>
-                                <p class="text-muted small">Maria ensures every guest feels at home and receives the exceptional service we're known for.</p>
+                                <p class="text-primary mb-3">Café Manager</p>
+                                <p class="text-muted small">Maria ensures the vibe is always relaxing and that every customer leaves with a smile and a great cup.</p>
                             </div>
                         </div>
                     </div>
@@ -251,11 +247,11 @@
                         <div class="card border-0 shadow-sm h-100 text-center">
                             <div class="card-body p-4">
                                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden mx-auto mb-3" style="max-width: 120px;">
-                                    <img src="uploads/profile/staff.jpg" alt="Sous Chef" class="img-fluid" style="object-fit: cover;">
+                                    <img src="uploads/profile/staff.jpg" alt="Pastry Chef" class="img-fluid" style="object-fit: cover;">
                                 </div>
                                 <h5 class="fw-bold mb-1">Pedro Reyes</h5>
-                                <p class="text-primary mb-3">Sous Chef</p>
-                                <p class="text-muted small">Pedro's expertise in traditional cooking methods ensures the authenticity of every dish we serve.</p>
+                                <p class="text-primary mb-3">Pastry Chef</p>
+                                <p class="text-muted small">Pedro pairs our coffee with delightful, freshly baked pastries and cakes every single morning.</p>
                             </div>
                         </div>
                     </div>
